@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- saved from url=(0025)https://wren.io/maps.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Maps – Wren</title>
+<script type="application/javascript" src="./maps_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./maps_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./maps_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./maps_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./maps_files/style.css">
+<link href="./maps_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./maps_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="https://wren.io/getting-started.html">Getting Started</a></li>
+      <li><a href="https://wren.io/contributing.html">Contributing</a></li>
+      <li><a href="https://wren.io/blog">Blog</a></li>
+      <li><a href="https://wren.io/try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./syntax.html">Syntax</a></li>
+        <li><a href="./values.html">Values</a></li>
+        <li><a href="./lists.html">Lists</a></li>
+        <li><a href="./maps.html">Maps</a></li>
+        <li><a href="./method-calls.html">Method Calls</a></li>
+        <li><a href="./control-flow.html">Control Flow</a></li>
+        <li><a href="./variables.html">Variables</a></li>
+        <li><a href="./classes.html">Classes</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./concurrency.html">Concurrency</a></li>
+        <li><a href="./error-handling.html">Error Handling</a></li>
+        <li><a href="./modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="./cli">Wren CLI</a></li>
+        <li><a href="../embedding/embedding.html">Embedding</a></li>
+        <li><a href="./performance.html">Performance</a></li>
+        <li><a href="./qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="./getting-started.html">Getting Started</a></div><div><a href="./contributing.html">Contributing</a></div><div><a href="./blog">Blog</a></div><div><a href="./try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./syntax.html">Syntax</a></li>
+            <li><a href="./values.html">Values</a></li>
+            <li><a href="./lists.html">Lists</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li><a href="./method-calls.html">Method Calls</a></li>
+            <li><a href="./control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./variables.html">Variables</a></li>
+            <li><a href="./classes.html">Classes</a></li>
+            <li><a href="./functions.html">Functions</a></li>
+            <li><a href="./concurrency.html">Concurrency</a></li>
+            <li><a href="./error-handling.html">Error Handling</a></li>
+            <li><a href="./modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./modules">API/Modules</a></li>
+            <li><a href="./embedding">Embedding</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+            <li><a href="./qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2>Maps</h2>
+    <p>A map is an <em>associative</em> collection. It holds a set of entries, each of which
+maps a <em>key</em> to a <em>value</em>. The same data structure has a variety of names in
+other languages: hash table, dictionary, association, table, etc.</p>
+<p>You can create a map by placing a series of comma-separated entries inside
+curly braces. Each entry is a key and a value separated by a colon:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token punctuation">{</span>
+  <span class="token string">"maple"</span><span class="token punctuation">:</span>  <span class="token string">"Sugar Maple (Acer Saccharum)"</span><span class="token punctuation">,</span>
+  <span class="token string">"larch"</span><span class="token punctuation">:</span>  <span class="token string">"Alpine Larch (Larix Lyallii)"</span><span class="token punctuation">,</span>
+  <span class="token string">"oak"</span><span class="token punctuation">:</span>    <span class="token string">"Red Oak (Quercus Rubra)"</span><span class="token punctuation">,</span>
+  <span class="token string">"fir"</span><span class="token punctuation">:</span>    <span class="token string">"Fraser Fir (Abies Fraseri)"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>This creates a map that associates a type of tree (key) to a specific 
+tree within that family (value). Syntactically, in a map literal, keys 
+can be any literal, a variable name, or a parenthesized expression. 
+Values can be any expression. Here, we’re using string literals for both keys 
+and values.</p>
+<p><em>Semantically</em>, values can be any object, and multiple keys may map to the same
+value. </p>
+<p>Keys have a few limitations. They must be one of the immutable built-in
+<a href="./values.html">value types</a> in Wren. That means a number, string, range, bool, or <code>null</code>.
+You can also use a <a href="./classes.html">class object</a> as a key (not an instance of that class, 
+the actual class itself).</p>
+<p>The reason for this limitation—and the reason maps are called “<em>hash</em>
+tables” in other languages—is that each key is used to generate a numeric
+<em>hash code</em>. This lets a map locate the value associated with a key in constant
+time, even in very large maps. Since Wren only knows how to hash certain
+built-in types, only those can be used as keys.</p>
+<h2>Adding entries <a href="./maps.html#adding-entries" name="adding-entries" class="header-anchor">#</a></h2>
+<p>You add new key-value pairs to the map using the <a href="./method-calls.html#subscripts">subscript operator</a>:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> capitals <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    capitals<span class="token punctuation">[</span><span class="token string">"Georgia"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Atlanta"</span>
+    capitals<span class="token punctuation">[</span><span class="token string">"Idaho"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Boise"</span>
+    capitals<span class="token punctuation">[</span><span class="token string">"Maine"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"Augusta"</span>
+</code></pre>
+
+<p>If the key isn’t already present, this adds it and associates it with the given
+value. If the key is already there, this just replaces its value.</p>
+<h2>Looking up values <a href="./maps.html#looking-up-values" name="looking-up-values" class="header-anchor">#</a></h2>
+<p>To find the value associated with some key, again you use your friend the
+subscript operator:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">[</span><span class="token string">"Idaho"</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; Boise</span>
+</code></pre>
+
+<p>If the key is present, this returns its value. Otherwise, it returns <code>null</code>. Of
+course, <code>null</code> itself can also be used as a value, so seeing <code>null</code> here
+doesn’t necessarily mean the key wasn’t found.</p>
+<p>To tell definitively if a key exists, you can call <code>containsKey()</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> capitals <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"Georgia"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">}</span>
+
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">[</span><span class="token string">"Georgia"</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; null (though key exists)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">[</span><span class="token string">"Idaho"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>   <span class="token comment">//&gt; null </span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token string">"Georgia"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; true</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token string">"Idaho"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">//&gt; false</span>
+</code></pre>
+
+<p>You can see how many entries a map contains using <code>count</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span>count<span class="token punctuation">)</span> <span class="token comment">//&gt; 3</span>
+</code></pre>
+
+<h2>Removing entries <a href="./maps.html#removing-entries" name="removing-entries" class="header-anchor">#</a></h2>
+<p>To remove an entry from a map, call <code>remove()</code> and pass in the key for the
+entry you want to delete:</p>
+<pre class="snippet language-lua"><code class="  language-lua">capitals<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token string">"Maine"</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token string">"Maine"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; false</span>
+</code></pre>
+
+<p>If the key was found, this returns the value that was associated with it:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token string">"Georgia"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; Atlanta</span>
+</code></pre>
+
+<p>If the key wasn’t in the map to begin with, <code>remove()</code> just returns <code>null</code>.</p>
+<p>If you want to remove <em>everything</em> from the map, like with <a href="./lists.html">lists</a>, you call
+<code>clear()</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua">capitals<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>capitals<span class="token punctuation">.</span>count<span class="token punctuation">)</span> <span class="token comment">//&gt; 0</span>
+</code></pre>
+
+<h2>Iterating over the contents <a href="./maps.html#iterating-over-the-contents" name="iterating-over-the-contents" class="header-anchor">#</a></h2>
+<p>The subscript operator works well for finding values when you know the key
+you’re looking for, but sometimes you want to see everything that’s in the map.
+You can use a regular for loop to iterate the contents, and map exposes two 
+additional methods to access the contents: <code>keys</code> and <code>values</code>. </p>
+<p>The <code>keys</code> method on a map returns a <a href="./modules/core/sequence.html">Sequence</a> that <a href="./control-flow.html#the-iterator-protocol">iterates</a> over all of
+the keys in the map, and the <code>values</code> method returns one that iterates over the values.</p>
+<p>Regardless of how you iterate, the <em>order</em> that things are iterated in 
+isn’t defined. Wren makes no promises about what order keys and values are 
+iterated. All it promises is that every entry will appear exactly once.</p>
+<p><strong>Iterating with for(entry in map)</strong> <br>
+When you iterate a map with <code>for</code>, you’ll be handed an <em>entry</em>, which contains
+a <code>key</code> and a <code>value</code> field. That gives you the info for each element in the map.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> birds <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token string">"Arizona"</span><span class="token punctuation">:</span> <span class="token string">"Cactus wren"</span><span class="token punctuation">,</span>
+  <span class="token string">"Hawaii"</span><span class="token punctuation">:</span> <span class="token string">"Nēnē"</span><span class="token punctuation">,</span>
+  <span class="token string">"Ohio"</span><span class="token punctuation">:</span> <span class="token string">"Northern Cardinal"</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span>bird <span class="token keyword">in</span> birds<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"The state bird of %(bird.key) is %(bird.value)"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p><strong>Iterating using the keys</strong>   </p>
+<p>You can also iterate over the keys and use each to look up its value:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> birds <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token string">"Arizona"</span><span class="token punctuation">:</span> <span class="token string">"Cactus wren"</span><span class="token punctuation">,</span>
+  <span class="token string">"Hawaii"</span><span class="token punctuation">:</span> <span class="token string">"Nēnē"</span><span class="token punctuation">,</span>
+  <span class="token string">"Ohio"</span><span class="token punctuation">:</span> <span class="token string">"Northern Cardinal"</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span>state <span class="token keyword">in</span> birds<span class="token punctuation">.</span>keys<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"The state bird of %(state) is "</span> <span class="token operator">+</span> birds<span class="token punctuation">[</span>state<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p><br></p><hr>
+<a class="right" href="./method-calls.html">Method Calls →</a>
+<a href="./lists.html">← Lists</a><p></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

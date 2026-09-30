@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)./configuring-the-vm.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Configuring the VM – Wren</title>
+<script type="application/javascript" src="./configuring-the-vm_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./configuring-the-vm_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./configuring-the-vm_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./configuring-the-vm_files/style.css">
+<link href="./configuring-the-vm_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="embedding">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./configuring-the-vm_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../Wren.html">Back to Wren</a></li>
+    </ul>
+    <section>
+      <h2>embedding</h2>
+      <ul>
+        <li><a href="./embedding.html">Introduction</a></li>
+        <li><a href="./slots-and-handles.html">Slots and Handles</a></li>
+        <li><a href="./calling-wren-from-c.html">Calling Wren from C</a></li>
+        <li><a href="./calling-c-from-wren.html">Calling C from Wren</a></li>
+        <li><a href="./storing-c-data.html">Storing C Data</a></li>
+        <li><a href="./configuring-the-vm.html">Configuring the VM</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><h2>embedding</h2></td>
+        <td><h2>?</h2></td>
+        <td><h2>?</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./">Introduction</a></li>
+            <li><a href="./slots-and-handles.html">Slots and Handles</a></li>
+            <li><a href="./calling-wren-from-c.html">Calling Wren from C</a></li>
+            <li><a href="./calling-c-from-wren.html">Calling C from Wren</a></li>
+            <li><a href="./storing-c-data.html">Storing C Data</a></li>
+            <li><a href="./configuring-the-vm.html">Configuring the VM</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+          </ul>
+        </td>
+        <td>
+          <ul>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Configuring the VM</h1>
+    <p>When you create a Wren VM, you tweak it by passing in a pointer to a
+WrenConfiguration structure. Since Wren has no global state, you can configure
+each VM differently if your application happens to run multiple.</p>
+<p>The struct looks like:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span>
+<span class="token punctuation">{</span>
+  WrenReallocateFn reallocateFn<span class="token punctuation">;</span>
+  WrenLoadModuleFn loadModuleFn<span class="token punctuation">;</span>
+  WrenBindForeignMethodFn bindForeignMethodFn<span class="token punctuation">;</span>
+  WrenBindForeignClassFn bindForeignClassFn<span class="token punctuation">;</span>
+  WrenWriteFn writeFn<span class="token punctuation">;</span>
+  WrenErrorFn errorFn<span class="token punctuation">;</span>
+  size_t initialHeapSize<span class="token punctuation">;</span>
+  size_t minHeapSize<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> heapGrowthPercent<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> WrenConfiguration<span class="token punctuation">;</span>
+</code></pre>
+
+<p>Most fields have useful defaults, which you can (and should) initialize by
+calling:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token function">wrenInitConfiguration</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>configuration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>Calling this ensures that your VM doesn’t get uninitialized configuration when
+new fields are added to WrenConfiguration. Here is what each field does, roughly
+categorized:</p>
+<h2>Binding <a href="./configuring-the-vm.html#binding" name="binding" class="header-anchor">#</a></h2>
+<p>The VM is isolated from the outside world. These callbacks let the VM request
+access to imported code and foreign functionality.</p>
+<h3><strong><code>loadModuleFn</code></strong> <a href="./configuring-the-vm.html#loadmodulefn" name="loadmodulefn" class="header-anchor">#</a></h3>
+<p>This is the callback Wren uses to load an imported module. The VM itself does
+not know how to talk to the file system, so when an <code>import</code> statement is
+executed, it relies on the host application to locate and read the source code
+for a module.</p>
+<p>The signature of this function is:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">WrenLoadModuleResult <span class="token function">loadModule</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> name<span class="token punctuation">)</span>
+</code></pre>
+
+<p>When a module is imported, Wren calls this and passes in the module’s name. The
+host should return the source code for that module in a <code>WrenLoadModuleResult</code> struct.</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">WrenLoadModuleResult <span class="token function">myLoadModule</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  WrenLoadModuleResult result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>source <span class="token operator">=</span> <span class="token function">getSourceForModule</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>The module loader is only be called once for any given module name. Wren caches
+the result internally so subsequent imports of the same module use the
+previously loaded code.</p>
+<p>If your host application isn’t able to load a module with some name, it should
+make sure the <code>source</code> value is <code>NULL</code> when returned. Wren will then report that as a runtime error.</p>
+<p>If you don’t use any <code>import</code> statements, you can leave the <code>loadModuleFn</code> field in
+the configuration set to <code>NULL</code> (the default).</p>
+<p>Additionally, the <code>WrenLoadModuleResult</code> allows us to add a callback for when Wren is 
+done with the <code>source</code>, so we can free the memory if needed.</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">loadModuleComplete</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> 
+                               <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> module<span class="token punctuation">,</span>
+                               WrenLoadModuleResult result<span class="token punctuation">)</span> 
+<span class="token punctuation">{</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>source<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//for example, if we used malloc to allocate</span>
+    <span class="token comment">//our source string, we use free to release it.</span>
+    <span class="token function">free</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>result<span class="token punctuation">.</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+WrenLoadModuleResult <span class="token function">myLoadModule</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  WrenLoadModuleResult result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>onComplete <span class="token operator">=</span> loadModuleComplete<span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>source <span class="token operator">=</span> <span class="token function">getSourceForModule</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<h3><strong><code>bindForeignMethodFn</code></strong> <a href="./configuring-the-vm.html#bindforeignmethodfn" name="bindforeignmethodfn" class="header-anchor">#</a></h3>
+<p>The callback Wren uses to find a foreign method and bind it to a class. See
+<a href="./calling-c-from-wren.html">this page</a> for details. If your application defines no foreign
+methods, you can leave this <code>NULL</code>.</p>
+<h3><strong><code>bindForeignClassFn</code></strong> <a href="./configuring-the-vm.html#bindforeignclassfn" name="bindforeignclassfn" class="header-anchor">#</a></h3>
+<p>The callback Wren uses to find a foreign class and get its foreign methods. See
+<a href="./storing-c-data.html">this page</a> for details. If your application defines no foreign
+classes, you can leave this <code>NULL</code>.</p>
+<h2>Diagnostics <a href="./configuring-the-vm.html#diagnostics" name="diagnostics" class="header-anchor">#</a></h2>
+<p>These let you wire up some minimal output so you can tell if your code is doing
+what you expect.</p>
+<h3><strong><code>writeFn</code></strong> <a href="./configuring-the-vm.html#writefn" name="writefn" class="header-anchor">#</a></h3>
+<p>This is the callback Wren uses to output text when <code>System.print()</code> or the other
+related functions are called. This is the minimal connection the VM has with the
+outside world and lets you do rudimentary “printf debugging”. Its signature is:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">write</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> text<span class="token punctuation">)</span>
+</code></pre>
+
+<p>Wren does <em>not</em> have a default implementation for this. It’s up to you to wire
+it up to <code>printf()</code> or some other way to show the text. If you leave it <code>NULL</code>,
+calls to <code>System.print()</code> and others silently do nothing.</p>
+<h3><strong><code>errorFn</code></strong> <a href="./configuring-the-vm.html#errorfn" name="errorfn" class="header-anchor">#</a></h3>
+<p>Wren uses this callback to report compile time and runtime errors. Its signature
+is:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">error</span><span class="token punctuation">(</span>
+      WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> 
+      WrenErrorType type<span class="token punctuation">,</span>
+      <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> module<span class="token punctuation">,</span>
+      <span class="token keyword">int</span> line<span class="token punctuation">,</span>
+      <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> message<span class="token punctuation">)</span>
+</code></pre>
+
+<p>The <code>type</code> parameter is one of:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">typedef</span> <span class="token keyword">enum</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// A syntax or resolution error detected at compile time.</span>
+  WREN_ERROR_COMPILE<span class="token punctuation">,</span>
+
+  <span class="token comment">// The error message for a runtime error.</span>
+  WREN_ERROR_RUNTIME<span class="token punctuation">,</span>
+
+  <span class="token comment">// One entry of a runtime error's stack trace.</span>
+  WREN_ERROR_STACK_TRACE
+<span class="token punctuation">}</span> WrenErrorType<span class="token punctuation">;</span>
+</code></pre>
+
+<p>When a compile error occurs, <code>errorFn</code> is called once with type
+<code>WREN_ERROR_COMPILE</code>, the name of the module and line where the error occurs,
+and the error message.</p>
+<p>Runtime errors include stack traces. To handle this, Wren first calls <code>errorFn</code>
+with <code>WREN_ERROR_RUNTIME</code>, no module or line, and the runtime error’s message.
+After that, it calls <code>errorFn</code> again using type <code>WREN_ERROR_STACK_TRACE</code>, once
+for each line in the stack trace. Each of those calls has the module and line
+where the method or function is defined and <code>message</code> is the name of the method
+or function.</p>
+<p>If you leave this <code>NULL</code>, Wren does not report any errors.</p>
+<h2>Memory Management <a href="./configuring-the-vm.html#memory-management" name="memory-management" class="header-anchor">#</a></h2>
+<p>These fields control how the VM allocates and manages memory.</p>
+<h3><strong><code>reallocateFn</code></strong> <a href="./configuring-the-vm.html#reallocatefn" name="reallocatefn" class="header-anchor">#</a></h3>
+<p>This lets you provide a custom memory allocation function. Its signature is:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">reallocate</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> memory<span class="token punctuation">,</span> size_t newSize<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> userData<span class="token punctuation">)</span>
+</code></pre>
+
+<p>Wren uses this one function to allocate, grow, shrink, and deallocate memory.
+When called, <code>memory</code> is the existing pointer to the block of memory if an
+allocation is being changed or freed. If Wren is requesting new memory, then
+<code>memory</code> is <code>NULL</code>.</p>
+<p><code>newSize</code> is the number of bytes of memory being requested. If memory is being
+freed, this is zero. Your callback should allocate the proper amount of memory
+and return it.</p>
+<p>If you don’t provide a custom allocator, the VM uses a default one that relies
+on <code>realloc</code> and <code>free</code>.</p>
+<h3><strong><code>initialHeapSize</code></strong> <a href="./configuring-the-vm.html#initialheapsize" name="initialheapsize" class="header-anchor">#</a></h3>
+<p>This defines the total number of bytes of memory the VM will allocate before
+triggering the first garbage collection. Setting this to a smaller number
+reduces the amount of memory Wren will have allocated at one time, but causes it
+to collect garbage more frequently.</p>
+<p>If you set this to zero, Wren uses a default size of 10MB.</p>
+<h3><strong><code>minHeapSize</code></strong> <a href="./configuring-the-vm.html#minheapsize" name="minheapsize" class="header-anchor">#</a></h3>
+<p>After a garbage collection occurs, the threshold for the <em>next</em> collection is
+determined based on the number of bytes remaining in use. This allows Wren to
+grow or shrink its memory usage automatically based on how much memory is
+actually needed.</p>
+<p>This can be used to ensure that the heap does not get <em>too</em> small, which can
+in turn lead to a large number of collections afterwards as the heap grows
+back to a usable size.</p>
+<p>If zero, this defaults to 1MB.</p>
+<h3><strong><code>heapGrowthPercent</code></strong> <a href="./configuring-the-vm.html#heapgrowthpercent" name="heapgrowthpercent" class="header-anchor">#</a></h3>
+<p>Wren tunes the rate of garbage collection based on how much memory is still in
+use after a collection. This number controls that. It determines the amount of
+additional memory Wren will use after a collection, as a percentage of the
+current heap size.</p>
+<p>For example, say that this is 50. After a garbage collection, there are 400
+bytes of memory still in use. That means the next collection will be triggered
+after a total of 600 bytes are allocated (including the 400 already in use.)</p>
+<p>Setting this to a smaller number wastes less memory, but triggers more
+frequent garbage collections.</p>
+<p>If set to zero, the VM uses a default of 50.</p>
+<p><a href="./storing-c-data.html">← Storing C Data</a></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

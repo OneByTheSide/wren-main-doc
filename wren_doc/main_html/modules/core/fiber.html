@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://wren.io/modules/core/fiber.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Fiber Class – Wren</title>
+<script type="application/javascript" src="./fiber_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./fiber_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./fiber_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./fiber_files/style.css">
+<link href="./fiber_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./fiber_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Fiber Class</h1>
+    <p>A lightweight coroutine. <a href="https://wren.io/concurrency.html">Here</a> is a gentle introduction.</p>
+<h2>Static Methods <a href="https://wren.io/modules/core/fiber.html#static-methods" name="static-methods" class="header-anchor">#</a></h2>
+<h3>Fiber.<strong>abort</strong>(message) <a href="https://wren.io/modules/core/fiber.html#fiber.abort(message)" name="fiber.abort(message)" class="header-anchor">#</a></h3>
+<p>Raises a runtime error with the provided message:</p>
+<pre class="snippet language-lua"><code class="  language-lua">Fiber<span class="token punctuation">.</span><span class="token function">abort</span><span class="token punctuation">(</span><span class="token string">"Something bad happened."</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>If the message is <code>null</code>, does nothing.</p>
+<h3>Fiber.<strong>current</strong> <a href="https://wren.io/modules/core/fiber.html#fiber.current" name="fiber.current" class="header-anchor">#</a></h3>
+<p>The currently executing fiber.</p>
+<h3>Fiber.<strong>new</strong>(function) <a href="https://wren.io/modules/core/fiber.html#fiber.new(function)" name="fiber.new(function)" class="header-anchor">#</a></h3>
+<p>Creates a new fiber that executes <code>function</code> in a separate coroutine when the
+fiber is run. Does not immediately start running the fiber.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I won't get printed"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p><code>function</code> must be a function (an actual <a href="https://wren.io/modules/core/fn.html">Fn</a> instance, not just an object
+with a <code>call()</code> method) and it may only take zero or one parameters.</p>
+<h3>Fiber.<strong>suspend</strong>() <a href="https://wren.io/modules/core/fiber.html#fiber.suspend()" name="fiber.suspend()" class="header-anchor">#</a></h3>
+<p>Pauses the current fiber, and stops the interpreter. Control returns to the
+host application.</p>
+<p>Typically, you store a reference to the fiber using <code>Fiber.current</code> before
+calling this. The fiber can be resumed later by calling or transferring to that
+reference. If there are no references to it, it is eventually garbage collected.</p>
+<p>Much like <code>yield()</code>, returns the value passed to <code>call()</code> or <code>transfer()</code> when
+the fiber is resumed.</p>
+<h3>Fiber.<strong>yield</strong>() <a href="https://wren.io/modules/core/fiber.html#fiber.yield()" name="fiber.yield()" class="header-anchor">#</a></h3>
+<p>Pauses the current fiber and transfers control to the parent fiber. “Parent”
+here means the last fiber that was started using <code>call</code> and not <code>transfer</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Before yield"</span><span class="token punctuation">)</span>
+  Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"After yield"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                <span class="token comment">//&gt; Before yield</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"After call"</span><span class="token punctuation">)</span>  <span class="token comment">//&gt; After call</span>
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                <span class="token comment">//&gt; After yield</span>
+</code></pre>
+
+<p>When resumed, the parent fiber’s <code>call()</code> method returns <code>null</code>.</p>
+<p>If a yielded fiber is resumed by calling <code>call()</code> or <code>transfer()</code> with an
+argument, <code>yield()</code> returns that value.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; value</span>
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token comment">// Run until the first yield.</span>
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"value"</span><span class="token punctuation">)</span> <span class="token comment">// Resume the fiber.</span>
+</code></pre>
+
+<p>If it was resumed by calling <code>call()</code> or <code>transfer()</code> with no argument, it
+returns <code>null</code>.</p>
+<p>If there is no parent fiber to return to, this exits the interpreter. This can
+be useful to pause execution until the host application wants to resume it
+later.</p>
+<pre class="snippet language-lua"><code class="  language-lua">Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"this does not get reached"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<h3>Fiber.<strong>yield</strong>(value) <a href="https://wren.io/modules/core/fiber.html#fiber.yield(value)" name="fiber.yield(value)" class="header-anchor">#</a></h3>
+<p>Similar to <code>Fiber.yield</code> but provides a value to return to the parent fiber’s
+<code>call</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token string">"value"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; value</span>
+</code></pre>
+
+<h2>Methods <a href="https://wren.io/modules/core/fiber.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>call</strong>() <a href="https://wren.io/modules/core/fiber.html#call()" name="call()" class="header-anchor">#</a></h3>
+<p>Starts or resumes the fiber if it is in a paused state. Equivalent to:</p>
+<pre class="snippet language-lua"><code class="  language-lua">fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+</code></pre>
+
+<h3><strong>call</strong>(value) <a href="https://wren.io/modules/core/fiber.html#call(value)" name="call(value)" class="header-anchor">#</a></h3>
+<p>Start or resumes the fiber if it is in a paused state. If the fiber is being
+started for the first time, and its function takes a parameter, <code>value</code> is
+passed to it.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span><span class="token operator">|</span>param<span class="token operator">|</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span> <span class="token comment">//&gt; begin</span>
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"begin"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>If the fiber is being resumed, <code>value</code> becomes the returned value of the fiber’s
+call to <code>yield</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; resume</span>
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+fiber<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"resume"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<h3><strong>error</strong> <a href="https://wren.io/modules/core/fiber.html#error" name="error" class="header-anchor">#</a></h3>
+<p>The error message that was passed when aborting the fiber, or <code>null</code> if the
+fiber has not been aborted.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  <span class="token number">123.</span>badMethod
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">try</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>fiber<span class="token punctuation">.</span>error<span class="token punctuation">)</span> <span class="token comment">//&gt; Num does not implement method 'badMethod'.</span>
+</code></pre>
+
+<h3><strong>isDone</strong> <a href="https://wren.io/modules/core/fiber.html#isdone" name="isdone" class="header-anchor">#</a></h3>
+<p>Whether the fiber’s main function has completed and the fiber can no longer be
+run. This returns <code>false</code> if the fiber is currently running or has yielded.</p>
+<h3><strong>try</strong>() <a href="https://wren.io/modules/core/fiber.html#try()" name="try()" class="header-anchor">#</a></h3>
+<p>Tries to run the fiber. If a runtime error occurs
+in the called fiber, the error is captured and is returned as a string.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  <span class="token number">123.</span>badMethod
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> error <span class="token operator">=</span> fiber<span class="token punctuation">.</span><span class="token function">try</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Caught error: "</span> <span class="token operator">+</span> error<span class="token punctuation">)</span>
+</code></pre>
+
+<p>If the called fiber raises an error, it can no longer be used.</p>
+<h3><strong>try</strong>(value) <a href="https://wren.io/modules/core/fiber.html#try(value)" name="try(value)" class="header-anchor">#</a></h3>
+<p>Tries to run the fiber. If a runtime error occurs
+in the called fiber, the error is captured and is returned as a string.
+If the fiber is being
+started for the first time, and its function takes a parameter, <code>value</code> is
+passed to it.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span><span class="token operator">|</span>value<span class="token operator">|</span>
+  value<span class="token punctuation">.</span>badMethod
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> error <span class="token operator">=</span> fiber<span class="token punctuation">.</span><span class="token function">try</span><span class="token punctuation">(</span><span class="token string">"just a string"</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Caught error: "</span> <span class="token operator">+</span> error<span class="token punctuation">)</span>
+</code></pre>
+
+<p>If the called fiber raises an error, it can no longer be used.</p>
+<h3><strong>transfer</strong>() <a href="https://wren.io/modules/core/fiber.html#transfer()" name="transfer()" class="header-anchor">#</a></h3>
+<p>Pauses execution of the current running fiber, and transfers control to this fiber.</p>
+<p><a href="https://wren.io/concurrency.html#transferring-control">Read more</a> about the difference between <code>call</code> and <code>transfer</code>. 
+Unlike <code>call</code>, <code>transfer</code> doesn’t track the origin of the transfer.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token comment">// keep hold of the fiber we start in</span>
+<span class="token keyword">var</span> main <span class="token operator">=</span> Fiber<span class="token punctuation">.</span>current
+
+<span class="token comment">// create a new fiber, note it doesn't execute yet!</span>
+<span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"inside 'fiber'"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; #2: from #1</span>
+  main<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                <span class="token comment">//&gt; #3: go back to 'main'</span>
+<span class="token punctuation">}</span>
+
+fiber<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>      <span class="token comment">//&gt; #1: print "inside 'fiber'" via #2</span>
+                      <span class="token comment">//&gt; this fiber is now paused by #1</span>
+
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"main"</span><span class="token punctuation">)</span>  <span class="token comment">//&gt; #4: prints "main", unpaused by #3</span>
+</code></pre>
+
+<h3><strong>transfer</strong>(value) <a href="https://wren.io/modules/core/fiber.html#transfer(value)" name="transfer(value)" class="header-anchor">#</a></h3>
+<p>Pauses execution of the current running fiber, and transfers control to this fiber.</p>
+<p>Similar to <code>transfer</code>, but a value can be passed between the fibers.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token comment">// keep hold of the fiber we start in</span>
+<span class="token keyword">var</span> main <span class="token operator">=</span> Fiber<span class="token punctuation">.</span>current
+
+<span class="token comment">// create a new fiber, note it doesn't execute yet</span>
+<span class="token comment">// also note that we're accepting a 'value' parameter</span>
+<span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span><span class="token operator">|</span>value<span class="token operator">|</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"in 'fiber' = %(value)"</span><span class="token punctuation">)</span>   <span class="token comment">//&gt; #2: in 'fiber' = 5</span>
+  <span class="token keyword">var</span> result <span class="token operator">=</span> main<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token string">"hello?"</span><span class="token punctuation">)</span>    <span class="token comment">//&gt; #3: send to 'message'</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"end 'fiber' = %(result)"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; #6: end 'fiber' = 32</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> message <span class="token operator">=</span> fiber<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>   <span class="token comment">//&gt; #1: send to 'value'</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"... %(message)"</span><span class="token punctuation">)</span>    <span class="token comment">//&gt; #4: ... hello?</span>
+fiber<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>                <span class="token comment">//&gt; #5: send to 'result'</span>
+</code></pre>
+
+<h3><strong>transferError</strong>(error) <a href="https://wren.io/modules/core/fiber.html#transfererror(error)" name="transfererror(error)" class="header-anchor">#</a></h3>
+<p>Transfer to this fiber, but set this fiber into an error state. 
+The <code>fiber.error</code> value will be populated with the value in <code>error</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> A <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"transferred to A"</span><span class="token punctuation">)</span>     <span class="token comment">//&gt; #4</span>
+  B<span class="token punctuation">.</span><span class="token function">transferError</span><span class="token punctuation">(</span><span class="token string">"error!"</span><span class="token punctuation">)</span>            <span class="token comment">//&gt; #5</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> B <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"started B"</span><span class="token punctuation">)</span>            <span class="token comment">//&gt; #2 </span>
+  A<span class="token punctuation">.</span><span class="token function">transfer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                         <span class="token comment">//&gt; #3</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"should not get here"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+B<span class="token punctuation">.</span><span class="token function">try</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                   <span class="token comment">//&gt; #1</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>B<span class="token punctuation">.</span>error<span class="token punctuation">)</span>     <span class="token comment">//&gt; #6: prints "error!" from #5</span>
+
+<span class="token comment">// B fiber can no longer be used</span>
+
+B<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>                  <span class="token comment">//&gt; #7: Cannot call an aborted fiber.</span>
+</code></pre>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://wren.io/modules/core/object.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Object Class – Wren</title>
+<script type="application/javascript" src="./object_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./object_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./object_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./object_files/style.css">
+<link href="./object_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./object_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Object Class</h1>
+    <h2>Static Methods <a href="https://wren.io/modules/core/object.html#static-methods" name="static-methods" class="header-anchor">#</a></h2>
+<h3><strong>same</strong>(obj1, obj2) <a href="https://wren.io/modules/core/object.html#same(obj1,-obj2)" name="same(obj1,-obj2)" class="header-anchor">#</a></h3>
+<p>Returns <code>true</code> if <em>obj1</em> and <em>obj2</em> are the same. For <a href="https://wren.io/values.html">value
+types</a>, this returns <code>true</code> if the objects have equivalent
+state. In other words, numbers, strings, booleans, and ranges compare by value.</p>
+<p>For all other objects, this returns <code>true</code> only if <em>obj1</em> and <em>obj2</em> refer to
+the exact same object in memory.</p>
+<p>This is similar to the built in <code>==</code> operator in Object except that this cannot
+be overriden. It allows you to reliably access the built-in equality semantics
+even on user-defined classes.</p>
+<h2>Methods <a href="https://wren.io/modules/core/object.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>!</strong> operator <a href="https://wren.io/modules/core/object.html#-operator" name="-operator" class="header-anchor">#</a></h3>
+<p>Returns <code>false</code>, since most objects are considered <a href="https://wren.io/modules/core/control-flow.html#truth">true</a>.</p>
+<h3><strong>==</strong>(other) and <strong>!=</strong>(other) operators <a href="https://wren.io/modules/core/object.html#==(other)-and-=(other)-operators" name="==(other)-and-=(other)-operators" class="header-anchor">#</a></h3>
+<p>Compares two objects using built-in equality. This compares <a href="https://wren.io/values.html">value
+types</a> by value, and all other objects are compared by
+identity—two objects are equal only if they are the exact same object.</p>
+<h3><strong>is</strong>(class) operator <a href="https://wren.io/modules/core/object.html#is(class)-operator" name="is(class)-operator" class="header-anchor">#</a></h3>
+<p>Returns <code>true</code> if this object’s class or one of its superclasses is <code>class</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token number">123</span> <span class="token keyword">is</span> Num<span class="token punctuation">)</span>     <span class="token comment">//&gt; true</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"s"</span> <span class="token keyword">is</span> Num<span class="token punctuation">)</span>     <span class="token comment">//&gt; false</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token keyword">is</span> String<span class="token punctuation">)</span> <span class="token comment">//&gt; false</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">is</span> List<span class="token punctuation">)</span>     <span class="token comment">//&gt; true</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">is</span> Sequence<span class="token punctuation">)</span> <span class="token comment">//&gt; true</span>
+</code></pre>
+
+<p>It is a runtime error if <code>class</code> is not a <a href="https://wren.io/modules/core/class.html">Class</a>.</p>
+<h3><strong>toString</strong> <a href="https://wren.io/modules/core/object.html#tostring" name="tostring" class="header-anchor">#</a></h3>
+<p>A default string representation of the object.</p>
+<h3><strong>type</strong> <a href="https://wren.io/modules/core/object.html#type" name="type" class="header-anchor">#</a></h3>
+<p>The <a href="https://wren.io/modules/core/class.html">Class</a> of the object.</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

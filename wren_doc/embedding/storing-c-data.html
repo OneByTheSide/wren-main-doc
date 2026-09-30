@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)./storing-c-data.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Storing C Data – Wren</title>
+<script type="application/javascript" src="./storing-c-data_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./storing-c-data_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./storing-c-data_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./storing-c-data_files/style.css">
+<link href="./storing-c-data_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="embedding">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./storing-c-data_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../Wren.html">Back to Wren</a></li>
+    </ul>
+    <section>
+      <h2>embedding</h2>
+      <ul>
+        <li><a href="./embedding.html">Introduction</a></li>
+        <li><a href="./slots-and-handles.html">Slots and Handles</a></li>
+        <li><a href="./calling-wren-from-c.html">Calling Wren from C</a></li>
+        <li><a href="./calling-c-from-wren.html">Calling C from Wren</a></li>
+        <li><a href="./storing-c-data.html">Storing C Data</a></li>
+        <li><a href="./configuring-the-vm.html">Configuring the VM</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><h2>embedding</h2></td>
+        <td><h2>?</h2></td>
+        <td><h2>?</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./">Introduction</a></li>
+            <li><a href="./slots-and-handles.html">Slots and Handles</a></li>
+            <li><a href="./calling-wren-from-c.html">Calling Wren from C</a></li>
+            <li><a href="./calling-c-from-wren.html">Calling C from Wren</a></li>
+            <li><a href="./storing-c-data.html">Storing C Data</a></li>
+            <li><a href="./configuring-the-vm.html">Configuring the VM</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+          </ul>
+        </td>
+        <td>
+          <ul>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Storing C Data</h1>
+    <p>An embedded language often needs to work with native data. You may want a
+pointer to some memory managed in the C heap, or maybe you want to store a chunk
+of data more efficiently than Wren’s dynamism allows. You may want a Wren object
+that represents a native resource like a file handle or database connection.</p>
+<p>For those cases, you can define a <strong>foreign class</strong>, a chimera whose state is
+half Wren and half C. It is a real Wren class with a name, constructor, and
+methods. You can define methods on it written in Wren, or <a href="./calling-c-from-wren.html">foreign methods</a>
+written in C. It produces real Wren objects that you can pass around, do <code>is</code>
+checks on, etc. But it also wraps a blob of raw memory that is opaque to Wren
+but accessible from C.</p>
+<h2>Defining a Foreign Class <a href="./storing-c-data.html#defining-a-foreign-class" name="defining-a-foreign-class" class="header-anchor">#</a></h2>
+<p>You define one like so:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">foreign</span> <span class="token keyword">class</span> <span class="token function">Point</span> <span class="token punctuation">{</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>The <code>foreign</code> keyword tells Wren to loop in the host application when it
+constructs instances of the class. The host tells Wren how many bytes of extra
+memory the foreign instance should contain and in return, Wren gives the host
+the opportunity to initialize that data.</p>
+<p>To talk to the host app, Wren needs a C function it can call when it constructs
+an instance of the foreign class. This function is found through a binding
+process similar to <a href="./calling-c-from-wren.html#binding-foreign-methods">how foreign methods are bound</a>. When you <a href="./configuring-the-vm.html">configure
+the VM</a>, you set the <code>bindForeignClassFn</code> field in WrenConfiguration to point
+to a C callback you define. Its signature must be:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">WrenForeignClassMethods <span class="token function">bindForeignClass</span><span class="token punctuation">(</span>
+    WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> module<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> className<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>Wren invokes this callback once when a foreign class declaration is executed.
+Wren passes in the name of the module containing the foreign class, and the name
+of the class being declared. The host’s responsibility is to return one of these
+structs:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span>
+<span class="token punctuation">{</span>
+  WrenForeignMethodFn allocate<span class="token punctuation">;</span>
+  WrenFinalizerFn finalize<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> WrenForeignClassMethods<span class="token punctuation">;</span>
+</code></pre>
+
+<p>It’s a pair of function pointers. The first, <code>allocate</code>, is called by Wren
+whenever an instance of the foreign class is created. (We’ll get to the optional
+<code>finalize</code> callback later.) The allocation callback has the same signature as a
+foreign method:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">allocate</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<h2>Initializing an Instance <a href="./storing-c-data.html#initializing-an-instance" name="initializing-an-instance" class="header-anchor">#</a></h2>
+<p>When you create an instance of a foreign class by calling one its
+<a href="https://wren.io/classes.html#constructors">constructors</a>, Wren invokes the <code>allocate</code> callback you gave it when binding
+the foreign class. Your primary responsibility in that callback is to tell Wren
+how many bytes of raw memory you need. You do that by calling:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">wrenSetSlotNewForeign</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span>
+    <span class="token keyword">int</span> slot<span class="token punctuation">,</span> <span class="token keyword">int</span> classSlot<span class="token punctuation">,</span> size_t size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>Like other <a href="./slots-and-handles.html">slot manipulation functions</a>, it both reads from and writes to
+the slot array. It has a few parameters to make it more general purpose since it
+can also be used in other foreign methods:</p>
+<ul>
+<li>
+<p>The <code>slot</code> parameter is the destination slot where the new foreign object
+  should be placed. When you’re calling this in a foreign class’s allocate
+  callback, this should be 0.</p>
+</li>
+<li>
+<p>The <code>classSlot</code> parameter is the slot where the foreign class being
+  constructed can be found. When the VM calls an allocate callback for a
+  foreign class, the class itself is already in slot 0, so you’ll pass 0 for
+  this too.</p>
+</li>
+<li>
+<p>Finally, the <code>size</code> parameter is the interesting one. Here, you pass in the
+  number of extra raw bytes of data you want the foreign instance to store.
+  This is the memory you get to play with from C.</p>
+</li>
+</ul>
+<p>So, for example, if you wanted to create a foreign instance that contains eight
+bytes of C data, you’d call:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span><span class="token operator">*</span> data <span class="token operator">=</span> <span class="token function">wrenSetSlotNewForeign</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>The value returned by <code>wrenSetSlotNewForeign()</code> is the raw pointer to the
+requested bytes. You can cast that to whatever C type makes sense (as long as it
+fits within the requested number of bytes) and initialize it as you see fit.</p>
+<p>Any parameters passed to the constructor are also available in subsequent slots
+in the slot array. That way you can initialize the foreign data based on values
+passed to the constructor from Wren.</p>
+<p>After the allocate callback returns, the class’s constructor in Wren is run and
+execution proceeds like normal. From here on out, within Wren, it appears you
+have a normal instance of a class. It just happens to have some extra bytes
+hiding inside it that can be accessed from foreign methods.</p>
+<h2>Accessing Foreign Data <a href="./storing-c-data.html#accessing-foreign-data" name="accessing-foreign-data" class="header-anchor">#</a></h2>
+<p>Typically, the way you make use of the data stored in an instance of a foreign
+class is through other foreign methods. Those are usually defined on the same
+foreign class, but can be defined on other classes as well. Wren doesn’t care.</p>
+<p>Once you have a foreign instance in a slot, you can access the raw bytes it
+stores by calling:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span><span class="token operator">*</span> <span class="token function">wrenGetSlotForeign</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">int</span> slot<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>You pass in the slot index containing the foreign object and it gives you back a
+pointer to the raw memory the object wraps. As usual, the C API doesn’t do any
+type or bounds checking, so it’s on you to make sure the object in that slot
+actually <em>is</em> an instance of a foreign class and contains as much memory as you
+access.</p>
+<p>Given that void pointer, you can now freely read and modify the data it points
+to. They’re your bits, Wren just holds them for you.</p>
+<h2>Freeing Resources <a href="./storing-c-data.html#freeing-resources" name="freeing-resources" class="header-anchor">#</a></h2>
+<p>If your foreign instances are just holding memory and you’re OK with Wren’s
+garbage collector managing the lifetime of that memory, then you’re done. Wren
+will keep the bytes around as long as there is still a reference to them. When
+the instance is no longer reachable, eventually the garbage collector will do
+its thing and free the memory.</p>
+<p>But, often, your foreign data refers to some resource whose lifetime needs to
+be explicitly managed. For example, if you have a foreign object that wraps an
+open file handle, you need to ensure that handle doesn’t get left open when the
+GC frees the foreign instance.</p>
+<p>Of course, you can (and usually should) add a method on your foreign class, like
+<code>close()</code> so the user can explicitly release the resource managed by the object.
+But if they forget to do that and the object is no longer reachable, you want to
+make sure the resource isn’t leaked.</p>
+<p>To that end, you can also provide a <em>finalizer</em> function when binding the
+foreign class. That’s the other callback in the WrenForeignClassMethods struct.
+If you provide that callback, then Wren will invoke it when an instance of your
+foreign class is about to be freed by the garbage collector. This gives you one
+last chance to clean up the object’s resources.</p>
+<p>Because this is called during the middle of a garbage collection, you do not
+have unfettered access to the VM. It’s not like a normal foreign method where
+you can monkey around with slots and other stuff. Doing that while the GC is
+running could leave Wren in a weird state.</p>
+<p>Instead, the finalize callback’s signature is only:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+<p>Wren gives you the pointer to your foreign function’s memory, and that’s it. The
+<em>only</em> thing you should do inside a finalizer is release any external resources
+referenced by that memory.</p>
+<h2>A Full Example <a href="./storing-c-data.html#a-full-example" name="a-full-example" class="header-anchor">#</a></h2>
+<p>That’s a lot to take in, so let’s walk through a full example of a foreign class
+with a finalizer and a couple of methods. We’ll do a File class that wraps the
+C standard file API.</p>
+<p>In Wren, the class we want looks like this:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">foreign</span> <span class="token keyword">class</span> <span class="token function">File</span> <span class="token punctuation">{</span>
+  <span class="token keyword">construct</span> <span class="token function">create</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  <span class="token keyword">foreign</span> <span class="token function">write</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+  <span class="token keyword">foreign</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>So you can create a new file given a path. Once you have one, you can write to
+it and then explicitly close it if you want. We also need to make sure the file
+gets closed if the user forgets to and the GC cleans up the object.</p>
+<h3>Setting up the VM <a href="./storing-c-data.html#setting-up-the-vm" name="setting-up-the-vm" class="header-anchor">#</a></h3>
+<p>Over in the host, first we’ll set up the VM:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"wren.h"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  WrenConfiguration config<span class="token punctuation">;</span>
+  <span class="token function">wrenInitConfiguration</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>config<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  config<span class="token punctuation">.</span>bindForeignClassFn <span class="token operator">=</span> bindForeignClass<span class="token punctuation">;</span>
+  config<span class="token punctuation">.</span>bindForeignMethodFn <span class="token operator">=</span> bindForeignMethod<span class="token punctuation">;</span>
+
+  WrenVM<span class="token operator">*</span> vm <span class="token operator">=</span> <span class="token function">wrenNewVM</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>config<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">wrenInterpret</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"my_module"</span><span class="token punctuation">,</span> <span class="token string">"some code..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<h3>Binding the foreign class <a href="./storing-c-data.html#binding-the-foreign-class" name="binding-the-foreign-class" class="header-anchor">#</a></h3>
+<p>We give the VM two callbacks. The first is for wiring up the foreign class
+itself:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">WrenForeignClassMethods <span class="token function">bindForeignClass</span><span class="token punctuation">(</span>
+    WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> module<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> className<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  WrenForeignClassMethods methods<span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>className<span class="token punctuation">,</span> <span class="token string">"File"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    methods<span class="token punctuation">.</span>allocate <span class="token operator">=</span> fileAllocate<span class="token punctuation">;</span>
+    methods<span class="token punctuation">.</span>finalize <span class="token operator">=</span> fileFinalize<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">{</span>
+    <span class="token comment">// Unknown class.</span>
+    methods<span class="token punctuation">.</span>allocate <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    methods<span class="token punctuation">.</span>finalize <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> methods<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>When our binding callback is invoked for the File class, we return the allocate
+and finalize functions the VM should call. Allocation looks like:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"wren.h"</span></span>
+
+<span class="token keyword">void</span> <span class="token function">fileAllocate</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  FILE<span class="token operator">*</span><span class="token operator">*</span> file <span class="token operator">=</span> <span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">wrenSetSlotNewForeign</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span>
+      <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> path <span class="token operator">=</span> <span class="token function">wrenGetSlotString</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token operator">*</span>file <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>First we create the instance by calling <code>wrenSetSlotNewForeign()</code>. We tell it to
+add enough extra bytes to store a <code>FILE*</code> in it, which is C’s representation of
+a file handle. We’re given back a pointer to the bytes. Since the file handle is
+itself a pointer, we end up with a double indirection, hence the <code>FILE**</code>. In
+most cases, you’ll just have a single <code>*</code>.</p>
+<p>We also pull the file path from the slot array. Then we tell C to create a new
+file at that path. That gives us back a new file handle – a <code>FILE*</code> – and we
+store that back into the foreign instance using <code>*file</code>. Now we have a foreign
+object that wraps an open file handle.</p>
+<p>The finalizer simply casts the foreign instance’s data back to the proper type
+and closes the file:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">fileFinalize</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token function">closeFile</span><span class="token punctuation">(</span><span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>It uses this little utility function:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">closeFile</span><span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token operator">*</span> file<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Already closed.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">*</span>file <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+  <span class="token function">fclose</span><span class="token punctuation">(</span><span class="token operator">*</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token operator">*</span>file <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>This closes the file (if it’s not already closed) and also nulls out the file
+handle so that we don’t try to use the file after it’s been closed.</p>
+<h3>Binding the foreign methods <a href="./storing-c-data.html#binding-the-foreign-methods" name="binding-the-foreign-methods" class="header-anchor">#</a></h3>
+<p>That’s the foreign <em>class</em> part. Now we have a couple of foreign <em>methods</em> to
+handle. The host tells the VM how to find them by giving Wren a pointer to this
+function:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c">WrenForeignMethodFn <span class="token function">bindForeignMethod</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> module<span class="token punctuation">,</span>
+    <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> className<span class="token punctuation">,</span> bool isStatic<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> signature<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>className<span class="token punctuation">,</span> <span class="token string">"File"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isStatic <span class="token operator">&amp;&amp;</span> <span class="token function">strcmp</span><span class="token punctuation">(</span>signature<span class="token punctuation">,</span> <span class="token string">"write(_)"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> fileWrite<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isStatic <span class="token operator">&amp;&amp;</span> <span class="token function">strcmp</span><span class="token punctuation">(</span>signature<span class="token punctuation">,</span> <span class="token string">"close()"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> fileClose<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// Unknown method.</span>
+  <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>When Wren calls this, we look at the class and method name to figure out which
+method it’s binding, and then return a pointer to the appropriate function. The
+foreign method for writing to the file is:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">fileWrite</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  FILE<span class="token operator">*</span><span class="token operator">*</span> file <span class="token operator">=</span> <span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">wrenGetSlotForeign</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Make sure the file is still open.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">*</span>file <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token function">wrenSetSlotString</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"Cannot write to a closed file."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">wrenAbortFiber</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> text <span class="token operator">=</span> <span class="token function">wrenGetSlotString</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">fwrite</span><span class="token punctuation">(</span>text<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">*</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>We use <code>wrenGetSlotForeign()</code> to pull the foreign data out of the slot array.
+Since this method is called on the file itself, the foreign object is in slot
+zero. We take the resulting pointer and cast it to a pointer of the proper type.
+Again, because our foreign data is <em>itself</em> a pointer, we get a pointer to a
+pointer.</p>
+<p>We do a little sanity checking to make sure the user isn’t writing to a file
+they already closed. If not, we call <code>fwrite()</code> to write to the file.</p>
+<p>The other method is <code>close()</code> to let them explicitly close the file:</p>
+<pre class="snippet language-c" data-lang="c"><code class="  language-c"><span class="token keyword">void</span> <span class="token function">fileClose</span><span class="token punctuation">(</span>WrenVM<span class="token operator">*</span> vm<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  FILE<span class="token operator">*</span><span class="token operator">*</span> file <span class="token operator">=</span> <span class="token punctuation">(</span>FILE<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">wrenGetSlotForeign</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">closeFile</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>It uses the same helper we defined above. And that’s it, a complete foreign
+class with a finalizer and a couple of foreign methods. In Wren, you can use it
+like so:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> file <span class="token operator">=</span> File<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token string">"some/path.txt"</span><span class="token punctuation">)</span>
+file<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"some text"</span><span class="token punctuation">)</span>
+file<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>Pretty neat, right? The resulting class looks and feels like a normal Wren
+class, but it has the functionality and much of the performance of native C
+code.</p>
+<p><a class="right" href="./configuring-the-vm.html">Configuring the VM →</a>
+<a href="./calling-c-from-wren.html">← Calling C from Wren</a></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

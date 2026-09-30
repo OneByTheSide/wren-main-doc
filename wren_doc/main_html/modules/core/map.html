@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)https://wren.io/modules/core/map.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Map Class – Wren</title>
+<script type="application/javascript" src="./map_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./map_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./map_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./map_files/style.css">
+<link href="./map_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./map_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Map Class</h1>
+    <p>Extends <a href="https://wren.io/modules/core/sequence.html">Sequence</a>.</p>
+<p>An associative collection that maps keys to values. More details <a href="https://wren.io/maps.html">here</a>.</p>
+<h2>Static Method <a href="https://wren.io/modules/core/map.html#static-method" name="static-method" class="header-anchor">#</a></h2>
+<h3>Map.<strong>new</strong>() <a href="https://wren.io/modules/core/map.html#map.new()" name="map.new()" class="header-anchor">#</a></h3>
+<p>Creates a new empty map. Equivalent to <code>{}</code>.</p>
+<h2>Methods <a href="https://wren.io/modules/core/map.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>clear</strong>() <a href="https://wren.io/modules/core/map.html#clear()" name="clear()" class="header-anchor">#</a></h3>
+<p>Removes all entries from the map.</p>
+<h3><strong>containsKey</strong>(key) <a href="https://wren.io/modules/core/map.html#containskey(key)" name="containskey(key)" class="header-anchor">#</a></h3>
+<p>Returns <code>true</code> if the map contains <code>key</code> or <code>false</code> otherwise.</p>
+<h3><strong>count</strong> <a href="https://wren.io/modules/core/map.html#count" name="count" class="header-anchor">#</a></h3>
+<p>The number of entries in the map.</p>
+<h3><strong>keys</strong> <a href="https://wren.io/modules/core/map.html#keys" name="keys" class="header-anchor">#</a></h3>
+<p>A <a href="https://wren.io/modules/core/sequence.html">Sequence</a> that can be used to iterate over the keys in the
+map. Note that iteration order is undefined. All keys will be iterated over,
+but may be in any order, and may even change between invocations of Wren.</p>
+<h3><strong>remove</strong>(key) <a href="https://wren.io/modules/core/map.html#remove(key)" name="remove(key)" class="header-anchor">#</a></h3>
+<p>Removes <code>key</code> and the value associated with it from the map. Returns the value.</p>
+<p>If the key was not present, returns <code>null</code>.</p>
+<h3><strong>values</strong> <a href="https://wren.io/modules/core/map.html#values" name="values" class="header-anchor">#</a></h3>
+<p>A <a href="https://wren.io/modules/core/sequence.html">Sequence</a> that can be used to iterate over the values in the
+map. Note that iteration order is undefined. All values will be iterated over,
+but may be in any order, and may even change between invocations of Wren.</p>
+<p>If multiple keys are associated with the same value, the value will appear
+multiple times in the sequence.</p>
+<h3><strong>[</strong>key<strong>]</strong> operator <a href="https://wren.io/modules/core/map.html#[key]-operator" name="[key]-operator" class="header-anchor">#</a></h3>
+<p>Gets the value associated with <code>key</code> in the map. If <code>key</code> is not present in the
+map, returns <code>null</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> map <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"george"</span><span class="token punctuation">:</span> <span class="token string">"harrison"</span><span class="token punctuation">,</span> <span class="token string">"ringo"</span><span class="token punctuation">:</span> <span class="token string">"starr"</span><span class="token punctuation">}</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>map<span class="token punctuation">[</span><span class="token string">"ringo"</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; starr</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>map<span class="token punctuation">[</span><span class="token string">"pete"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment">//&gt; null</span>
+</code></pre>
+
+<h3><strong>[</strong>key<strong>]=</strong>(value) operator <a href="https://wren.io/modules/core/map.html#[key]=(value)-operator" name="[key]=(value)-operator" class="header-anchor">#</a></h3>
+<p>Associates <code>value</code> with <code>key</code> in the map. If <code>key</code> was already in the map, this
+replaces the previous association.</p>
+<p>It is a runtime error if the key is not a <a href="https://wren.io/modules/core/bool.html">Bool</a>,
+<a href="https://wren.io/modules/core/class.html">Class</a>, <a href="https://wren.io/modules/core/null.html">Null</a>, <a href="https://wren.io/modules/core/num.html">Num</a>, <a href="https://wren.io/modules/core/range.html">Range</a>,
+or <a href="https://wren.io/modules/core/string.html">String</a>.</p>
+<h3><strong>iterate</strong>(iterator), <strong>iteratorValue</strong>(iterator) <a href="https://wren.io/modules/core/map.html#iterate(iterator),-iteratorvalue(iterator)" name="iterate(iterator),-iteratorvalue(iterator)" class="header-anchor">#</a></h3>
+<p>Implements the <a href="https://wren.io/control-flow.html#the-iterator-protocol">iterator protocol</a> for iterating over the keys and values of a map at the same time.</p>
+<p>When a map (as opposed to its keys or values separately) is iterated over, each key/value pair is wrapped in a <code>MapEntry</code> object. <code>MapEntry</code> is a small helper class which has read-only <code>key</code> and <code>value</code> properties and a familiar <code>toString</code> representation.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> map <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"paul"</span><span class="token punctuation">:</span> <span class="token string">"mccartney"</span><span class="token punctuation">}</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>entry <span class="token keyword">in</span> map<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>type<span class="token punctuation">)</span>                    <span class="token comment">// MapEntry</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>entry<span class="token punctuation">.</span>key <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> entry<span class="token punctuation">.</span>value<span class="token punctuation">)</span> <span class="token comment">// paul mccartney</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>entry<span class="token punctuation">)</span>                         <span class="token comment">// paul:mccartney</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>All map entries will be iterated over, but may be in any order, and may even change between invocations of Wren.</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

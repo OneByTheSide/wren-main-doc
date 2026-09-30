@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://wren.io/modules/core/string.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>String Class – Wren</title>
+<script type="application/javascript" src="./string_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./string_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./string_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./string_files/style.css">
+<link href="./string_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./string_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>String Class</h1>
+    <p>A string is an immutable array of bytes. Strings usually store text, in which
+case the bytes are the UTF-8 encoding of the text’s code points. But you can put
+any kind of byte values in there you want, including null bytes or invalid
+UTF-8.</p>
+<p>There are a few ways to think of a string:</p>
+<ul>
+<li>
+<p>As a searchable chunk of text composed of a sequence of textual code points.</p>
+</li>
+<li>
+<p>As an iterable sequence of code point numbers.</p>
+</li>
+<li>
+<p>As a flat array of directly indexable bytes.</p>
+</li>
+</ul>
+<p>All of those are useful for some problems, so the string API supports all three.
+The first one is the most common, so that’s what methods directly on the string
+class cater to.</p>
+<p>In UTF-8, a single Unicode code point—very roughly a single
+“character”—may encode to one or more bytes. This means you can’t
+efficiently index by code point. There’s no way to jump directly to, say, the
+fifth code point in a string without walking the string from the beginning and
+counting them as you go.</p>
+<p>Because counting code points is relatively slow, the indexes passed to string
+methods are <em>byte</em> offsets, not <em>code point</em> offsets. When you do:</p>
+<pre class="snippet language-lua"><code class="  language-lua">someString<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>
+</code></pre>
+
+<p>That means “get the code point starting at <em>byte</em> three”, not “get the third
+code point in the string”. This sounds scary, but keep in mind that the methods
+on strings <em>return</em> byte indexes too. So, for example, this does what you want:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> metalBand <span class="token operator">=</span> <span class="token string">"Fäcëhämmër"</span>
+<span class="token keyword">var</span> hPosition <span class="token operator">=</span> metalBand<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token string">"h"</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>metalBand<span class="token punctuation">[</span>hPosition<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; h</span>
+</code></pre>
+
+<p>A string can also be indexed with a <a href="https://wren.io/modules/core/range.html">Range</a>, which will return a 
+new string as a substring of the original. </p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> example <span class="token operator">=</span> <span class="token string">"hello wren"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>example<span class="token punctuation">[</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token number">.5</span><span class="token punctuation">]</span><span class="token punctuation">)</span>   <span class="token comment">//&gt; hello</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>example<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4.</span><span class="token punctuation">.</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment">//&gt; wren</span>
+</code></pre>
+
+<p>If you want to work with a string as a sequence numeric code points, call the
+<code>codePoints</code> getter. It returns a <a href="https://wren.io/modules/core/sequence.html">Sequence</a> that decodes UTF-8
+and iterates over the code points, returning each as a number.</p>
+<p>If you want to get at the raw bytes, call <code>bytes</code>. This returns a Sequence that
+ignores any UTF-8 encoding and works directly at the byte level.</p>
+<h2>Static Methods <a href="https://wren.io/modules/core/string.html#static-methods" name="static-methods" class="header-anchor">#</a></h2>
+<h3>String.<strong>fromCodePoint</strong>(codePoint) <a href="https://wren.io/modules/core/string.html#string.fromcodepoint(codepoint)" name="string.fromcodepoint(codepoint)" class="header-anchor">#</a></h3>
+<p>Creates a new string containing the UTF-8 encoding of <code>codePoint</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">String<span class="token punctuation">.</span><span class="token function">fromCodePoint</span><span class="token punctuation">(</span><span class="token number">8225</span><span class="token punctuation">)</span> <span class="token comment">//&gt; ‡</span>
+</code></pre>
+
+<p>It is a runtime error if <code>codePoint</code> is not an integer between <code>0</code> and
+<code>0x10ffff</code>, inclusive.</p>
+<h3>String.<strong>fromByte</strong>(byte) <a href="https://wren.io/modules/core/string.html#string.frombyte(byte)" name="string.frombyte(byte)" class="header-anchor">#</a></h3>
+<p>Creates a new string containing the single byte <code>byte</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">String<span class="token punctuation">.</span><span class="token function">fromByte</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token comment">//&gt; �</span>
+</code></pre>
+
+<p>It is a runtime error if <code>byte</code> is not an integer between <code>0</code> and <code>0xff</code>, inclusive.</p>
+<h2>Methods <a href="https://wren.io/modules/core/string.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>bytes</strong> <a href="https://wren.io/modules/core/string.html#bytes" name="bytes" class="header-anchor">#</a></h3>
+<p>Gets a <a href="https://wren.io/modules/core/sequence.html"><code>Sequence</code></a> that can be used to access the raw bytes of
+the string and ignore any UTF-8 encoding. In addition to the normal sequence
+methods, the returned object also has a subscript operator that can be used to
+directly index bytes.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">.</span>bytes<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 101 (for "e")</span>
+</code></pre>
+
+<p>The <code>count</code> method on the returned sequence returns the number of bytes in the
+string. Unlike <code>count</code> on the string itself, it does not have to iterate over
+the string, and runs in constant time instead.</p>
+<h3><strong>codePoints</strong> <a href="https://wren.io/modules/core/string.html#codepoints" name="codepoints" class="header-anchor">#</a></h3>
+<p>Gets a <a href="https://wren.io/modules/core/sequence.html"><code>Sequence</code></a> that can be used to access the UTF-8 decode
+code points of the string <em>as numbers</em>. Iteration and subscripting work similar
+to the string itself. The difference is that instead of returning
+single-character strings, this returns the numeric code point values.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> string <span class="token operator">=</span> <span class="token string">"(ᵔᴥᵔ)"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span>codePoints<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 40 (for "(")</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span>codePoints<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 7461 (for "ᴥ")</span>
+</code></pre>
+
+<p>If the byte at <code>index</code> does not begin a valid UTF-8 sequence, or the end of the
+string is reached before the sequence is complete, returns <code>-1</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> string <span class="token operator">=</span> <span class="token string">"(ᵔᴥᵔ)"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span>codePoints<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; -1 (in the middle of "ᵔ")</span>
+</code></pre>
+
+<h3><strong>contains</strong>(other) <a href="https://wren.io/modules/core/string.html#contains(other)" name="contains(other)" class="header-anchor">#</a></h3>
+<p>Checks if <code>other</code> is a substring of the string.</p>
+<p>It is a runtime error if <code>other</code> is not a string.</p>
+<h3><strong>count</strong> <a href="https://wren.io/modules/core/string.html#count" name="count" class="header-anchor">#</a></h3>
+<p>Returns the number of code points in the string. Since UTF-8 is a
+variable-length encoding, this requires iterating over the entire string, which
+is relatively slow.</p>
+<p>If the string contains bytes that are invalid UTF-8, each byte adds one to the
+count as well.</p>
+<h3><strong>endsWith</strong>(suffix) <a href="https://wren.io/modules/core/string.html#endswith(suffix)" name="endswith(suffix)" class="header-anchor">#</a></h3>
+<p>Checks if the string ends with <code>suffix</code>.</p>
+<p>It is a runtime error if <code>suffix</code> is not a string.</p>
+<h3><strong>indexOf</strong>(search) <a href="https://wren.io/modules/core/string.html#indexof(search)" name="indexof(search)" class="header-anchor">#</a></h3>
+<p>Returns the index of the first byte matching <code>search</code> in the string or <code>-1</code> if
+<code>search</code> was not found.</p>
+<p>It is a runtime error if <code>search</code> is not a string.</p>
+<h3><strong>indexOf</strong>(search, start) <a href="https://wren.io/modules/core/string.html#indexof(search,-start)" name="indexof(search,-start)" class="header-anchor">#</a></h3>
+<p>Returns the index of the first byte matching <code>search</code> in the string or <code>-1</code> if
+<code>search</code> was not found, starting at byte offset <code>start</code>. The <code>start</code> offset can
+also be negative, which will be offset relative to end of the string instead.
+Searches forward, from the offset to the end of the string.</p>
+<p>It is a runtime error if <code>search</code> is not a string or <code>start</code> is not an integer
+index within the string’s byte length.</p>
+<h3><strong>iterate</strong>(iterator), <strong>iteratorValue</strong>(iterator) <a href="https://wren.io/modules/core/string.html#iterate(iterator),-iteratorvalue(iterator)" name="iterate(iterator),-iteratorvalue(iterator)" class="header-anchor">#</a></h3>
+<p>Implements the <a href="https://wren.io/control-flow.html#the-iterator-protocol">iterator protocol</a> for iterating over the <em>code points</em> in the
+string:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> codePoints <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>c <span class="token keyword">in</span> <span class="token string">"(ᵔᴥᵔ)"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  codePoints<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>codePoints<span class="token punctuation">)</span> <span class="token comment">//&gt; [(, ᵔ, ᴥ, ᵔ, )]</span>
+</code></pre>
+
+<p>If the string contains any bytes that are not valid UTF-8, this iterates over
+those too, one byte at a time.</p>
+<h3><strong>replace</strong>(old, swap) <a href="https://wren.io/modules/core/string.html#replace(old,-swap)" name="replace(old,-swap)" class="header-anchor">#</a></h3>
+<p>Returns a new string with all occurrences of <code>old</code> replaced with <code>swap</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> string <span class="token operator">=</span> <span class="token string">"abc abc abc"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; abcabcabc</span>
+</code></pre>
+
+<h3><strong>split</strong>(separator) <a href="https://wren.io/modules/core/string.html#split(separator)" name="split(separator)" class="header-anchor">#</a></h3>
+<p>Returns a list of one or more strings separated by <code>separator</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> string <span class="token operator">=</span> <span class="token string">"abc abc abc"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; [abc, abc, abc]</span>
+</code></pre>
+
+<p>It is a runtime error if <code>separator</code> is not a string or is an empty string.</p>
+<h3><strong>startsWith</strong>(prefix) <a href="https://wren.io/modules/core/string.html#startswith(prefix)" name="startswith(prefix)" class="header-anchor">#</a></h3>
+<p>Checks if the string starts with <code>prefix</code>.</p>
+<p>It is a runtime error if <code>prefix</code> is not a string.</p>
+<h3><strong>trim</strong>() <a href="https://wren.io/modules/core/string.html#trim()" name="trim()" class="header-anchor">#</a></h3>
+<p>Returns a new string with whitespace removed from the beginning and end of this
+string. “Whitespace” is space, tab, carriage return, and line feed characters.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">" \nstuff\r\t"</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; stuff</span>
+</code></pre>
+
+<h3><strong>trim</strong>(chars) <a href="https://wren.io/modules/core/string.html#trim(chars)" name="trim(chars)" class="header-anchor">#</a></h3>
+<p>Returns a new string with all code points in <code>chars</code> removed from the beginning
+and end of this string.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥᵔᴥᵔbearᵔᴥᴥᵔᵔ"</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥ"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; bear</span>
+</code></pre>
+
+<h3><strong>trimEnd</strong>() <a href="https://wren.io/modules/core/string.html#trimend()" name="trimend()" class="header-anchor">#</a></h3>
+<p>Like <code>trim()</code> but only removes from the end of the string.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">" \nstuff\r\t"</span><span class="token punctuation">.</span><span class="token function">trimEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; " \nstuff"</span>
+</code></pre>
+
+<h3><strong>trimEnd</strong>(chars) <a href="https://wren.io/modules/core/string.html#trimend(chars)" name="trimend(chars)" class="header-anchor">#</a></h3>
+<p>Like <code>trim()</code> but only removes from the end of the string.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥᵔᴥᵔbearᵔᴥᴥᵔᵔ"</span><span class="token punctuation">.</span><span class="token function">trimEnd</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥ"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; ᵔᴥᵔᴥᵔbear</span>
+</code></pre>
+
+<h3><strong>trimStart</strong>() <a href="https://wren.io/modules/core/string.html#trimstart()" name="trimstart()" class="header-anchor">#</a></h3>
+<p>Like <code>trim()</code> but only removes from the beginning of the string.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">" \nstuff\r\t"</span><span class="token punctuation">.</span><span class="token function">trimStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; "stuff\r\t"</span>
+</code></pre>
+
+<h3><strong>trimStart</strong>(chars) <a href="https://wren.io/modules/core/string.html#trimstart(chars)" name="trimstart(chars)" class="header-anchor">#</a></h3>
+<p>Like <code>trim()</code> but only removes from the beginning of the string.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥᵔᴥᵔbearᵔᴥᴥᵔᵔ"</span><span class="token punctuation">.</span><span class="token function">trimStart</span><span class="token punctuation">(</span><span class="token string">"ᵔᴥ"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; bearᵔᴥᴥᵔᵔ</span>
+</code></pre>
+
+<h3><strong>+</strong>(other) operator <a href="https://wren.io/modules/core/string.html#+(other)-operator" name="+(other)-operator" class="header-anchor">#</a></h3>
+<p>Returns a new string that concatenates this string and <code>other</code>.</p>
+<p>It is a runtime error if <code>other</code> is not a string.</p>
+<h3><strong>*</strong>(count) operator <a href="https://wren.io/modules/core/string.html#(count)-operator" name="(count)-operator" class="header-anchor">#</a></h3>
+<p>Returns a new string that contains this string repeated <code>count</code> times.</p>
+<p>It is a runtime error if <code>count</code> is not a positive integer.</p>
+<h3><strong>==</strong>(other) operator <a href="https://wren.io/modules/core/string.html#==(other)-operator" name="==(other)-operator" class="header-anchor">#</a></h3>
+<p>Checks if the string is equal to <code>other</code>.</p>
+<h3><strong>!=</strong>(other) operator <a href="https://wren.io/modules/core/string.html#=(other)-operator" name="=(other)-operator" class="header-anchor">#</a></h3>
+<p>Check if the string is not equal to <code>other</code>.</p>
+<h3><strong>[</strong>index<strong>]</strong> operator <a href="https://wren.io/modules/core/string.html#[index]-operator" name="[index]-operator" class="header-anchor">#</a></h3>
+<p>Returns a string containing the code point starting at byte <code>index</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"ʕ•ᴥ•ʔ"</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; ᴥ</span>
+</code></pre>
+
+<p>Since <code>ʕ</code> is two bytes in UTF-8 and <code>•</code> is three, the fifth byte points to the
+bear’s nose.</p>
+<p>If <code>index</code> points into the middle of a UTF-8 sequence or at otherwise invalid
+UTF-8, this returns a one-byte string containing the byte at that index:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I ♥ NY"</span><span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; (one-byte string [153])</span>
+</code></pre>
+
+<p>It is a runtime error if <code>index</code> is greater than the number of bytes in the
+string.</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

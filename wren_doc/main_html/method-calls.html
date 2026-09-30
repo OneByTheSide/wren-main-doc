@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)./method-calls.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Method Calls – Wren</title>
+<script type="application/javascript" src="./method-calls_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./method-calls_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./method-calls_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./method-calls_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./method-calls_files/style.css">
+<link href="./method-calls_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="./">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="./"><img src="./method-calls_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="./getting-started.html">Getting Started</a></li>
+      <li><a href="./contributing.html">Contributing</a></li>
+      <li><a href="./blog">Blog</a></li>
+      <li><a href="./try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./syntax.html">Syntax</a></li>
+        <li><a href="./values.html">Values</a></li>
+        <li><a href="./lists.html">Lists</a></li>
+        <li><a href="./maps.html">Maps</a></li>
+        <li><a href="./method-calls.html">Method Calls</a></li>
+        <li><a href="./control-flow.html">Control Flow</a></li>
+        <li><a href="./variables.html">Variables</a></li>
+        <li><a href="./classes.html">Classes</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./concurrency.html">Concurrency</a></li>
+        <li><a href="./error-handling.html">Error Handling</a></li>
+        <li><a href="./modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="./cli">Wren CLI</a></li>
+        <li><a href="../embedding/embedding.html">Embedding</a></li>
+        <li><a href="./performance.html">Performance</a></li>
+        <li><a href="./qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="./getting-started.html">Getting Started</a></div><div><a href="./contributing.html">Contributing</a></div><div><a href="./blog">Blog</a></div><div><a href="./try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./syntax.html">Syntax</a></li>
+            <li><a href="./values.html">Values</a></li>
+            <li><a href="./lists.html">Lists</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li><a href="./method-calls.html">Method Calls</a></li>
+            <li><a href="./control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./variables.html">Variables</a></li>
+            <li><a href="./classes.html">Classes</a></li>
+            <li><a href="./functions.html">Functions</a></li>
+            <li><a href="./concurrency.html">Concurrency</a></li>
+            <li><a href="./error-handling.html">Error Handling</a></li>
+            <li><a href="./modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./modules">API/Modules</a></li>
+            <li><a href="./embedding">Embedding</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+            <li><a href="./qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2>Method Calls</h2>
+    <p>Wren is deeply object oriented, so most code consists of invoking methods on
+objects, usually something like this:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Heyoo!"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; Heyoo!</span>
+</code></pre>
+
+<p>You have a <em>receiver</em> expression (here <code>System</code>) followed by a <code>.</code>, then a name
+(<code>print</code>) and an argument list in parentheses (<code>("Heyoo!")</code>). Multiple arguments
+are separated by commas:</p>
+<pre class="snippet language-lua"><code class="  language-lua">list<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"item"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>The argument list can also be empty:</p>
+<pre class="snippet language-lua"><code class="  language-lua">list<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>The VM executes a method call like so:</p>
+<ol>
+<li>Evaluate the receiver and arguments from left to right.</li>
+<li>Look up the method on the receiver’s <a href="./classes.html">class</a>.</li>
+<li>Invoke it, passing in the argument values.</li>
+</ol>
+<h2>Signature <a href="./method-calls.html#signature" name="signature" class="header-anchor">#</a></h2>
+<p>Unlike most other dynamically-typed languages, in Wren a class can have multiple
+methods with the same <em>name</em>, as long as they have different <em>signatures</em>. The
+signature includes the method’s name along with the number of arguments it
+takes. In technical terms, this means you can <em>overload by arity</em>.</p>
+<p>For example, the <a href="./modules/random/random.html">Random</a> class has two methods for getting a random integer.
+One takes a minimum and maximum value and returns a value in that range. The
+other only takes a maximum value and uses 0 as the minimum:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> random <span class="token operator">=</span> Random<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+random<span class="token punctuation">.</span><span class="token function">int</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+random<span class="token punctuation">.</span><span class="token function">int</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>In a language like Python or JavaScript, these would both call a single <code>int()</code>
+method, which has some kind of “optional” parameter. The body of the method
+figures out how many arguments were passed and uses control flow to handle the
+two different behaviors. That means first parameter represents “max unless
+another parameter was passed, in which case it’s min”. </p>
+<p>This type of ‘variadic’ code isn’t ideal, so Wren doesn’t encourage it.</p>
+<p>In Wren, these are calls to two entirely separate methods, <code>int(_,_)</code> and
+<code>int(_)</code>. This makes it easier to define “overloads” like this since you don’t
+need optional parameters or any kind of control flow to handle the different
+cases.</p>
+<p>It’s also faster to execute. Since we know how many arguments are passed at
+compile time, we can compile this to directly call the right method and avoid
+any “if I got two arguments do this…” runtime work.</p>
+<h2>Getters <a href="./method-calls.html#getters" name="getters" class="header-anchor">#</a></h2>
+<p>Some methods exist to expose a stored or computed property of an object. These
+are <em>getters</em> and have no parentheses:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">"string"</span><span class="token punctuation">.</span>count    <span class="token comment">//&gt; 6</span>
+<span class="token punctuation">(</span><span class="token number">1.</span><span class="token number">.10</span><span class="token punctuation">)</span><span class="token punctuation">.</span>min       <span class="token comment">//&gt; 1</span>
+<span class="token number">1.23</span><span class="token punctuation">.</span>sin          <span class="token comment">//&gt; 0.9424888019317</span>
+<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>isEmpty <span class="token comment">//&gt; false</span>
+</code></pre>
+
+<p>A getter is <em>not</em> the same as a method with an empty argument list. The <code>()</code> is
+part of the signature, so <code>count</code> and <code>count()</code> have different signatures.
+Unlike Ruby’s optional parentheses, Wren wants to make sure you call a getter
+like a getter and a <code>()</code> method like a <code>()</code> method. These don’t work:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">"string"</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>clear
+</code></pre>
+
+<p>If you’re defining some member that doesn’t need any parameters, you need to
+decide if it should be a getter or a method with an empty <code>()</code> parameter list.
+The general guidelines are:</p>
+<ul>
+<li>If it modifies the object or has some other side effect, make it a method:</li>
+</ul>
+<pre class="snippet language-lua"><code class="  language-lua">list<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+
+<ul>
+<li>If the method supports multiple arities, make the zero-parameter case a <code>()</code>
+    method to be consistent with the other versions:</li>
+</ul>
+<pre class="snippet language-lua"><code class="  language-lua">Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span><span class="token string">"value"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<ul>
+<li>Otherwise, it can probably be a getter.</li>
+</ul>
+<h2>Setters <a href="./method-calls.html#setters" name="setters" class="header-anchor">#</a></h2>
+<p>A getter lets an object expose a public “property” that you can <em>read</em>.
+Likewise, a <em>setter</em> lets you write to a property:</p>
+<pre class="snippet language-lua"><code class="  language-lua">person<span class="token punctuation">.</span>height <span class="token operator">=</span> <span class="token number">74</span> <span class="token comment">// Grew up!</span>
+</code></pre>
+
+<p>Despite the <code>=</code>, this is just another syntax for a method call. From the
+language’s perspective, the above line is just a call to the <code>height=(_)</code>
+method on <code>person</code>, passing in <code>74</code>.</p>
+<p>Since the <code>=(_)</code> is in the setter’s signature, an object can have both a getter
+and setter with the same name without a collision. Defining both lets you
+provide a read/write property.</p>
+<h2>Operators <a href="./method-calls.html#operators" name="operators" class="header-anchor">#</a></h2>
+<p>Wren has most of the same operators you know and love with the same precedence
+and associativity. We have three prefix operators:</p>
+<pre class="snippet language-lua"><code class="  language-lua">! <span class="token operator">~</span> <span class="token operator">-</span>
+</code></pre>
+
+<p>They are just method calls on their operand without any other arguments. An
+expression like <code>!possible</code> means “call the <code>!</code> method on <code>possible</code>”.</p>
+<p>We also have a slew of infix operators—they have operands on both sides.
+They are:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token operator">*</span> <span class="token operator">/</span> <span class="token operator">%</span> <span class="token operator">+</span> <span class="token operator">-</span> <span class="token operator">..</span> <span class="token punctuation">...</span> <span class="token operator">&lt;&lt;</span> <span class="token operator">&gt;&gt;</span> <span class="token operator">&lt;</span> <span class="token operator">&lt;=</span> <span class="token operator">&gt;</span> <span class="token operator">&gt;=</span> <span class="token operator">==</span> !<span class="token operator">=</span> <span class="token operator">&amp;</span> <span class="token operator">^</span> <span class="token operator">|</span> <span class="token keyword">is</span>
+</code></pre>
+
+<p>Like prefix operators, they are all funny ways of writing method calls. The left
+operand is the receiver, and the right operand gets passed to it. So <code>a + b</code> is
+semantically interpreted as “invoke the <code>+(_)</code> method on <code>a</code>, passing it <code>b</code>”.</p>
+<p>Note that <code>-</code> is both a prefix and an infix operator. Since they have different
+signatures (<code>-</code> and <code>-(_)</code>), there’s no ambiguity between them.</p>
+<p>Most of these are probably familiar already. The <code>..</code> and <code>...</code> operators are
+“range” operators. The number type implements those to create <a href="./values.html#ranges">range</a>
+objects, but they are method calls like other operators.</p>
+<p>The <code>is</code> keyword is a “type test” operator. The base <a href="./modules/core/object.html">Object</a> class implements
+it to tell if an object is an instance of a given class. You’ll rarely need to,
+but you can override <code>is</code> in your own classes. That can be useful for things
+like mocks or proxies where you want an object to masquerade as a certain class.</p>
+<h2>Subscripts <a href="./method-calls.html#subscripts" name="subscripts" class="header-anchor">#</a></h2>
+<p>Another familiar syntax from math is <em>subscripting</em> using square brackets
+(<code>[]</code>). It’s handy for working with collection-like objects. For example:</p>
+<pre class="snippet language-lua"><code class="  language-lua">list<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>    <span class="token comment">// Get the first item in a list.</span>
+map<span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">]</span> <span class="token comment">// Get the value associated with "key".</span>
+</code></pre>
+
+<p>You know the refrain by now. In Wren, these are method calls. In the above
+examples, the signature is <code>[_]</code>. Subscript operators may also take multiple
+arguments, which is useful for things like multi-dimensional arrays:</p>
+<pre class="snippet language-lua"><code class="  language-lua">matrix<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
+</code></pre>
+
+<p>These examples are subscript “getters”, and there are also
+corresponding <em>subscript setters</em>:</p>
+<pre class="snippet language-lua"><code class="  language-lua">list<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"item"</span>
+map<span class="token punctuation">[</span><span class="token string">"key"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"value"</span>
+</code></pre>
+
+<p>These are equivalent to method calls whose signature is <code>[_]=(_)</code> and whose
+arguments are both the subscript (or subscripts) and the value on the right-hand
+side.</p>
+<p><br></p><hr>
+<a class="right" href="./control-flow.html">Control Flow →</a>
+<a href="./maps.html">← Maps</a><p></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://wren.io/modules/core/system.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>System Class – Wren</title>
+<script type="application/javascript" src="./system_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./system_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./system_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./system_files/style.css">
+<link href="./system_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./system_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>System Class</h1>
+    <p>The System class is a grab-bag of functionality exposed by the VM, mostly for
+use during development or debugging.</p>
+<h2>Static Methods <a href="https://wren.io/modules/core/system.html#static-methods" name="static-methods" class="header-anchor">#</a></h2>
+<h3>System.<strong>clock</strong> <a href="https://wren.io/modules/core/system.html#system.clock" name="system.clock" class="header-anchor">#</a></h3>
+<p>Returns the number of seconds (including fractional seconds) since the program
+was started. This is usually used for benchmarking.</p>
+<h3>System.<strong>gc</strong>() <a href="https://wren.io/modules/core/system.html#system.gc()" name="system.gc()" class="header-anchor">#</a></h3>
+<p>Requests that the VM perform an immediate garbage collection to free unused
+memory.</p>
+<h3>System.<strong>print</strong>() <a href="https://wren.io/modules/core/system.html#system.print()" name="system.print()" class="header-anchor">#</a></h3>
+<p>Prints a single newline to the console.</p>
+<h3>System.<strong>print</strong>(object) <a href="https://wren.io/modules/core/system.html#system.print(object)" name="system.print(object)" class="header-anchor">#</a></h3>
+<p>Prints <code>object</code> to the console followed by a newline. If not already a string,
+the object is converted to a string by calling <code>toString</code> on it.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I like bananas"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; I like bananas</span>
+</code></pre>
+
+<h3>System.<strong>printAll</strong>(sequence) <a href="https://wren.io/modules/core/system.html#system.printall(sequence)" name="system.printall(sequence)" class="header-anchor">#</a></h3>
+<p>Iterates over <code>sequence</code> and prints each element, then prints a single newline
+at the end. Each element is converted to a string by calling <code>toString</code> on it.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">printAll</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 1[2, 3]4</span>
+</code></pre>
+
+<h3>System.<strong>write</strong>(object) <a href="https://wren.io/modules/core/system.html#system.write(object)" name="system.write(object)" class="header-anchor">#</a></h3>
+<p>Prints a single value to the console, but does not print a newline character
+afterwards. Converts the value to a string by calling <code>toString</code> on it.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 9</span>
+</code></pre>
+
+<p>In the above example, the result of <code>4 + 5</code> is printed, and then the prompt is
+printed on the same line because no newline character was printed afterwards.</p>
+<h3>System.<strong>writeAll</strong>(sequence) <a href="https://wren.io/modules/core/system.html#system.writeall(sequence)" name="system.writeall(sequence)" class="header-anchor">#</a></h3>
+<p>Iterates over <code>sequence</code> and prints each element, but does not print a newline
+character afterwards. Each element is converted to a string by calling <code>toString</code> on it.</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)./error-handling.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Error Handling – Wren</title>
+<script type="application/javascript" src="./error-handling_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./error-handling_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./error-handling_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./error-handling_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./error-handling_files/style.css">
+<link href="./error-handling_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="./">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="./"><img src="./error-handling_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="./getting-started.html">Getting Started</a></li>
+      <li><a href="./contributing.html">Contributing</a></li>
+      <li><a href="./blog">Blog</a></li>
+      <li><a href="./try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./syntax.html">Syntax</a></li>
+        <li><a href="./values.html">Values</a></li>
+        <li><a href="./lists.html">Lists</a></li>
+        <li><a href="./maps.html">Maps</a></li>
+        <li><a href="./method-calls.html">Method Calls</a></li>
+        <li><a href="./control-flow.html">Control Flow</a></li>
+        <li><a href="./variables.html">Variables</a></li>
+        <li><a href="./classes.html">Classes</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./concurrency.html">Concurrency</a></li>
+        <li><a href="./error-handling.html">Error Handling</a></li>
+        <li><a href="./modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="./cli">Wren CLI</a></li>
+        <li><a href="../embedding/embedding.html">Embedding</a></li>
+        <li><a href="./performance.html">Performance</a></li>
+        <li><a href="./qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="./getting-started.html">Getting Started</a></div><div><a href="./contributing.html">Contributing</a></div><div><a href="./blog">Blog</a></div><div><a href="./try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./syntax.html">Syntax</a></li>
+            <li><a href="./values.html">Values</a></li>
+            <li><a href="./lists.html">Lists</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li><a href="./method-calls.html">Method Calls</a></li>
+            <li><a href="./control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./variables.html">Variables</a></li>
+            <li><a href="./classes.html">Classes</a></li>
+            <li><a href="./functions.html">Functions</a></li>
+            <li><a href="./concurrency.html">Concurrency</a></li>
+            <li><a href="./error-handling.html">Error Handling</a></li>
+            <li><a href="./modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./modules">API/Modules</a></li>
+            <li><a href="./embedding">Embedding</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+            <li><a href="./qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2>Error Handling</h2>
+    <p>Errors come in a few fun flavors.</p>
+<h2>Syntax errors <a href="./error-handling.html#syntax-errors" name="syntax-errors" class="header-anchor">#</a></h2>
+<p>The first errors you’re likely to run into are syntax errors. These include
+simple bugs where your code doesn’t follow the language’s grammar, like:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token number">1</span> <span class="token operator">+</span> <span class="token operator">*</span> <span class="token number">2</span>
+</code></pre>
+
+<p>Wren detects these errors as soon as it tries to read your code. When it hits
+one, you get a friendly error message, like:</p>
+<pre><code>[main line 1] Error on '*': Unexpected token for expression.
+</code></pre>
+<p>Some slightly more “semantic” errors fall into this bucket too. Things like
+using a variable that hasn’t been defined, or declaring two variables with the
+same name in the same scope. So if you do:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token string">"once"</span>
+<span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token string">"twice"</span>
+</code></pre>
+
+<p>Wren tells you:</p>
+<pre><code>[main line 2] Error on 'a': Top-level variable is already defined.
+</code></pre>
+<p>Note that it does this before it executes <em>any</em> code. Unlike some other
+scripting languages, Wren tries to help you find your errors as soon as
+possible when it can.</p>
+<p>If it starts running your code, you can be sure you don’t have any errors
+related to syntax or variable scope.</p>
+<h2>Runtime errors <a href="./error-handling.html#runtime-errors" name="runtime-errors" class="header-anchor">#</a></h2>
+<p>Alas, just fixing all of the “compile-time” errors doesn’t mean your code does
+what you want. Your program may still have errors that can’t be detected
+statically. Since they can’t be found until your code is run, they’re called
+“runtime” errors.</p>
+<p>Most runtime errors come from the VM itself. They arise from code trying to
+perform an operation that the VM can’t do. The most common error is a “method
+not found” one. If you call a method on an object and its class (and all of its
+superclasses) don’t define that method, there’s nothing Wren can do:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">class</span> <span class="token function">Foo</span> <span class="token punctuation">{</span>
+  <span class="token keyword">construct</span> <span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> foo <span class="token operator">=</span> Foo<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+foo<span class="token punctuation">.</span>someRandomMethod
+</code></pre>
+
+<p>If you run this, Wren will print:</p>
+<pre><code>Foo does not implement method 'someRandomMethod'.
+</code></pre>
+<p>Then it stops executing code. Unlike some other languages, Wren doesn’t keep
+plugging away after a runtime error has occurred. A runtime error implies
+there’s a bug in your code and it wants to draw your attention to it. To help
+you out, it prints a stack trace showing where in the code the error occurred,
+and all of the method calls that led to it.</p>
+<p>Another common runtime error is passing an argument of the wrong type to a
+method. For example, lists are indexed using a number. If you try to pass some
+other type, it’s an error:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">]</span>
+list<span class="token punctuation">[</span><span class="token string">"1"</span><span class="token punctuation">]</span>
+</code></pre>
+
+<p>This exits with:</p>
+<pre><code>Subscript must be a number or a range.
+[main line 2] in (script)
+</code></pre>
+<p>These are the two most common kinds of runtime errors, but there are others.
+Stuff like out of bounds errors on lists, calling a function with the wrong
+number of arguments, etc.</p>
+<h2>Handling runtime errors <a href="./error-handling.html#handling-runtime-errors" name="handling-runtime-errors" class="header-anchor">#</a></h2>
+<p>Most of the time, runtime errors indicate a bug in your code and the best
+solution is to fix the bug. However, sometimes it’s useful to be able to handle
+them at, uh, runtime.</p>
+<p>To keep the language simpler, Wren does not have exception handling. Instead, it
+takes advantage of <a href="./concurrency.html">fibers</a> for handling errors. When a runtime error occurs,
+the current fiber is aborted. Normally, Wren will also abort any fibers that
+invoked that one, all the way to the main fiber, and then exit the VM.</p>
+<p>However, you can run a fiber using the <code>try</code> method. If a runtime error occurs
+in the called fiber, the error is captured and the <code>try</code> method returns the
+error message as a string.</p>
+<p>For example, if you run this program:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> fiber <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  <span class="token number">123.</span>badMethod
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> error <span class="token operator">=</span> fiber<span class="token punctuation">.</span><span class="token function">try</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Caught error: "</span> <span class="token operator">+</span> error<span class="token punctuation">)</span>
+</code></pre>
+
+<p>It prints:</p>
+<pre><code>Caught error: Num does not implement method 'badMethod'.
+</code></pre>
+<p>The called fiber can no longer be used, but any other fibers can proceed as
+usual. When a fiber has been aborted because of a runtime error, you can also
+get the error from the fiber object. Continuing the above example:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>fiber<span class="token punctuation">.</span>error<span class="token punctuation">)</span>
+</code></pre>
+
+<p>This also prints:</p>
+<pre><code>Num does not implement method 'badMethod'.
+</code></pre>
+<p>If you have a chain of fiber calls and a runtime error occurs, it will walk the
+chain looking for a <code>try</code> call, so this can also be used to capture runtime
+errors generated in fibers that are invoked by the one you called <code>try</code> on.</p>
+<h2>Creating runtime errors <a href="./error-handling.html#creating-runtime-errors" name="creating-runtime-errors" class="header-anchor">#</a></h2>
+<p>Most runtime errors come from within the Wren VM, but you may want to be able
+to cause your own runtime errors to occur. This can be done by calling the
+<code>abort()</code> static method on <code>Fiber</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua">Fiber<span class="token punctuation">.</span><span class="token function">abort</span><span class="token punctuation">(</span><span class="token string">"Something bad happened"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>You must pass in an error message, and it must be a string.</p>
+<p>If the provided message is <code>null</code>, no runtime error is raised.</p>
+<h2>Failures <a href="./error-handling.html#failures" name="failures" class="header-anchor">#</a></h2>
+<p>The last flavor of errors is the highest-level one. All of the above errors
+indicate <em>bugs</em>—places where the code itself is incorrect. But some
+errors indicate that the code simply couldn’t accomplish its task for
+unforeseeable reasons. We’ll call these “failures”.</p>
+<p>Consider a program that reads in a string of input from the user and parses it
+to a number. Many strings are not valid numbers, so this parsing can fail. The
+only way the program could prevent that failure is by validating the string
+before its parsed, but validating that a string is a number is pretty much the
+same thing as parsing it.</p>
+<p>For cases like this where failure can occur and the program <em>will</em> want to
+handle it, fibers and <code>try()</code> are too coarse-grained to work with. Instead,
+these operations will indicate failure by <em>returning</em> some sort of error
+indication.</p>
+<p>For example, a method for parsing a number could return a number on success and
+<code>null</code> to indicate parsing failed. Since Wren is dynamically typed, it’s easy
+and natural for a method to return different types of values.</p>
+<p><br></p><hr>
+<a class="right" href="./modularity.html">Modularity →</a>
+<a href="./concurrency.html">← Concurrency</a><p></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

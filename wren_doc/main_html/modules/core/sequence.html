@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://wren.io/modules/core/sequence.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Sequence Class – Wren</title>
+<script type="application/javascript" src="./sequence_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./sequence_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./sequence_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./sequence_files/style.css">
+<link href="./sequence_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./sequence_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Sequence Class</h1>
+    <p>An abstract base class for any iterable object. Any class that implements the
+core <a href="https://wren.io/control-flow.html#the-iterator-protocol">iterator protocol</a> can extend this to get a number of helpful methods.</p>
+<h2>Methods <a href="https://wren.io/modules/core/sequence.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>all</strong>(predicate) <a href="https://wren.io/modules/core/sequence.html#all(predicate)" name="all(predicate)" class="header-anchor">#</a></h3>
+<p>Tests whether all the elements in the sequence pass the <code>predicate</code>.</p>
+<p>Iterates over the sequence, passing each element to the function <code>predicate</code>.
+If it returns something <a href="https://wren.io/modules/control-flow.html#truth">false</a>, stops iterating
+and returns the value. Otherwise, returns <code>true</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">all</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&gt;</span> <span class="token number">2</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; false</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">all</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; true</span>
+</code></pre>
+
+<h3><strong>any</strong>(predicate) <a href="https://wren.io/modules/core/sequence.html#any(predicate)" name="any(predicate)" class="header-anchor">#</a></h3>
+<p>Tests whether any element in the sequence passes the <code>predicate</code>.</p>
+<p>Iterates over the sequence, passing each element to the function <code>predicate</code>.
+If it returns something <a href="https://wren.io/control-flow.html#truth">true</a>, stops iterating and
+returns that value. Otherwise, returns <code>false</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">any</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&lt;</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; false</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">any</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&gt;</span> <span class="token number">2</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; true</span>
+</code></pre>
+
+<h3><strong>contains</strong>(element) <a href="https://wren.io/modules/core/sequence.html#contains(element)" name="contains(element)" class="header-anchor">#</a></h3>
+<p>Returns whether the sequence contains any element equal to the given element.</p>
+<h3><strong>count</strong> <a href="https://wren.io/modules/core/sequence.html#count" name="count" class="header-anchor">#</a></h3>
+<p>The number of elements in the sequence.</p>
+<p>Unless a more efficient override is available, this will iterate over the
+sequence in order to determine how many elements it contains.</p>
+<h3><strong>count</strong>(predicate) <a href="https://wren.io/modules/core/sequence.html#count(predicate)" name="count(predicate)" class="header-anchor">#</a></h3>
+<p>Returns the number of elements in the sequence that pass the <code>predicate</code>.</p>
+<p>Iterates over the sequence, passing each element to the function <code>predicate</code>
+and counting the number of times the returned value evaluates to <code>true</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">count</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&gt;</span> <span class="token number">2</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 1</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">count</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 3</span>
+</code></pre>
+
+<h3><strong>each</strong>(function) <a href="https://wren.io/modules/core/sequence.html#each(function)" name="each(function)" class="header-anchor">#</a></h3>
+<p>Iterates over the sequence, passing each element to the given <code>function</code>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token punctuation">[</span><span class="token string">"one"</span><span class="token punctuation">,</span> <span class="token string">"two"</span><span class="token punctuation">,</span> <span class="token string">"three"</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">each</span> <span class="token punctuation">{</span><span class="token operator">|</span>word<span class="token operator">|</span> System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+</code></pre>
+
+<h3><strong>isEmpty</strong> <a href="https://wren.io/modules/core/sequence.html#isempty" name="isempty" class="header-anchor">#</a></h3>
+<p>Returns whether the sequence contains any elements.</p>
+<p>This can be more efficient that <code>count == 0</code> because this does not iterate over
+the entire sequence.</p>
+<h3><strong>join</strong>(separator) <a href="https://wren.io/modules/core/sequence.html#join(separator)" name="join(separator)" class="header-anchor">#</a></h3>
+<p>Converts every element in the sequence to a string and then joins the results
+together into a single string, each separated by <code>separator</code>.</p>
+<p>It is a runtime error if <code>separator</code> is not a string.</p>
+<h3><strong>join</strong>() <a href="https://wren.io/modules/core/sequence.html#join()" name="join()" class="header-anchor">#</a></h3>
+<p>Converts every element in the sequence to a string and then joins the results
+together into a single string.</p>
+<h3><strong>map</strong>(transformation) <a href="https://wren.io/modules/core/sequence.html#map(transformation)" name="map(transformation)" class="header-anchor">#</a></h3>
+<p>Creates a new sequence that applies the <code>transformation</code> to each element in the
+original sequence while it is iterated.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> doubles <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">*</span> <span class="token number">2</span> <span class="token punctuation">}</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>n <span class="token keyword">in</span> doubles<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token comment">//&gt; 2</span>
+                  <span class="token comment">//&gt; 4</span>
+                  <span class="token comment">//&gt; 6</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>The returned sequence is <em>lazy</em>. It only applies the mapping when you iterate
+over the sequence, and it does so by holding a reference to the original
+sequence.</p>
+<p>This means you can use <code>map(_)</code> for things like infinite sequences or sequences
+that have side effects when you iterate over them. But it also means that
+changes to the original sequence will be reflected in the mapped sequence.</p>
+<p>To force eager evaluation, just call <code>.toList</code> on the result.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> numbers <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> doubles <span class="token operator">=</span> numbers<span class="token punctuation">.</span><span class="token function">map</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">*</span> <span class="token number">2</span> <span class="token punctuation">}</span><span class="token punctuation">.</span>toList
+numbers<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>doubles<span class="token punctuation">)</span> <span class="token comment">//&gt; [2, 4, 6]</span>
+</code></pre>
+
+<h3><strong>reduce</strong>(function) <a href="https://wren.io/modules/core/sequence.html#reduce(function)" name="reduce(function)" class="header-anchor">#</a></h3>
+<p>Reduces the sequence down to a single value. <code>function</code> is a function that
+takes two arguments, the accumulator and sequence item and returns the new
+accumulator value. The accumulator is initialized from the first item in the
+sequence. Then, the function is invoked on each remaining item in the sequence,
+iteratively updating the accumulator.</p>
+<p>It is a runtime error to call this on an empty sequence.</p>
+<h3><strong>reduce</strong>(seed, function) <a href="https://wren.io/modules/core/sequence.html#reduce(seed,-function)" name="reduce(seed,-function)" class="header-anchor">#</a></h3>
+<p>Similar to above, but uses <code>seed</code> for the initial value of the accumulator. If
+the sequence is empty, returns <code>seed</code>.</p>
+<h3><strong>skip</strong>(count) <a href="https://wren.io/modules/core/sequence.html#skip(count)" name="skip(count)" class="header-anchor">#</a></h3>
+<p>Creates a new sequence that skips the first <code>count</code> elements of the original
+sequence.</p>
+<p>The returned sequence is <em>lazy</em>. The first <code>count</code> elements are only skipped
+once you start to iterate the returned sequence. Changes to the original
+sequence will be reflected in the filtered sequence.</p>
+<h3><strong>take</strong>(count) <a href="https://wren.io/modules/core/sequence.html#take(count)" name="take(count)" class="header-anchor">#</a></h3>
+<p>Creates a new sequence that iterates only the first <code>count</code> elements of the
+original sequence.</p>
+<p>The returned sequence is <em>lazy</em>. Changes to the original sequence will be
+reflected in the filtered sequence.</p>
+<h3><strong>toList</strong> <a href="https://wren.io/modules/core/sequence.html#tolist" name="tolist" class="header-anchor">#</a></h3>
+<p>Creates a <a href="https://wren.io/modules/core/list.html">list</a> containing all the elements in the sequence.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1.</span><span class="token number">.3</span><span class="token punctuation">)</span><span class="token punctuation">.</span>toList<span class="token punctuation">)</span>  <span class="token comment">//&gt; [1, 2, 3]</span>
+</code></pre>
+
+<p>If the sequence is already a list, this creates a copy of it.</p>
+<h3><strong>where</strong>(predicate) <a href="https://wren.io/modules/core/sequence.html#where(predicate)" name="where(predicate)" class="header-anchor">#</a></h3>
+<p>Creates a new sequence containing only the elements from the original sequence
+that pass the <code>predicate</code>.</p>
+<p>During iteration, each element in the original sequence is passed to the
+function <code>predicate</code>. If it returns <code>false</code>, the element is skipped.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> odds <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1.</span><span class="token number">.6</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">where</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>n <span class="token keyword">in</span> odds<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token comment">//&gt; 1</span>
+                    <span class="token comment">//&gt; 3</span>
+                    <span class="token comment">//&gt; 5</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>The returned sequence is <em>lazy</em>. It only applies the filtering when you iterate
+over the sequence, and it does so by holding a reference to the original
+sequence.</p>
+<p>This means you can use <code>where(_)</code> for things like infinite sequences or
+sequences that have side effects when you iterate over them. But it also means
+that changes to the original sequence will be reflected in the filtered
+sequence.</p>
+<p>To force eager evaluation, just call <code>.toList</code> on the result.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> numbers <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> odds <span class="token operator">=</span> numbers<span class="token punctuation">.</span><span class="token function">where</span> <span class="token punctuation">{</span><span class="token operator">|</span>n<span class="token operator">|</span> n <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">.</span>toList
+numbers<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>odds<span class="token punctuation">)</span> <span class="token comment">//&gt; [1, 3, 5]</span>
+</code></pre>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://wren.io/modules/core/range.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Range Class – Wren</title>
+<script type="application/javascript" src="./range_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./range_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./range_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./range_files/style.css">
+<link href="./range_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./range_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Range Class</h1>
+    <p>A range defines a bounded range of values from a starting point to a possibly
+exclusive endpoint. <a href="https://wren.io/values.html#ranges">Here</a> is a friendly introduction.</p>
+<p>Extends <a href="https://wren.io/modules/core/sequence.html">Sequence</a>.</p>
+<h2>Methods <a href="https://wren.io/modules/core/range.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>from</strong> <a href="https://wren.io/modules/core/range.html#from" name="from" class="header-anchor">#</a></h3>
+<p>The starting point of the range. A range may be backwards, so this can be
+greater than [to].</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>from<span class="token punctuation">)</span> <span class="token comment">//&gt; 3</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">4.</span><span class="token number">.2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>from<span class="token punctuation">)</span> <span class="token comment">//&gt; 4</span>
+</code></pre>
+
+<h3><strong>to</strong> <a href="https://wren.io/modules/core/range.html#to" name="to" class="header-anchor">#</a></h3>
+<p>The endpoint of the range. If the range is inclusive, this value is included,
+otherwise it is not.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">)</span> <span class="token comment">//&gt; 5</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">4.</span><span class="token number">.2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">)</span> <span class="token comment">//&gt; 2</span>
+</code></pre>
+
+<h3><strong>min</strong> <a href="https://wren.io/modules/core/range.html#min" name="min" class="header-anchor">#</a></h3>
+<p>The minimum bound of the range. Returns either <code>from</code>, or <code>to</code>, whichever is
+lower.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>min<span class="token punctuation">)</span> <span class="token comment">//&gt; 3</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">4.</span><span class="token number">.2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>min<span class="token punctuation">)</span> <span class="token comment">//&gt; 2</span>
+</code></pre>
+
+<h3><strong>max</strong> <a href="https://wren.io/modules/core/range.html#max" name="max" class="header-anchor">#</a></h3>
+<p>The maximum bound of the range. Returns either <code>from</code>, or <code>to</code>, whichever is
+greater.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>max<span class="token punctuation">)</span> <span class="token comment">//&gt; 5</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">4.</span><span class="token number">.2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>max<span class="token punctuation">)</span> <span class="token comment">//&gt; 4</span>
+</code></pre>
+
+<h3><strong>isInclusive</strong> <a href="https://wren.io/modules/core/range.html#isinclusive" name="isinclusive" class="header-anchor">#</a></h3>
+<p>Whether or not the range includes <code>to</code>. (<code>from</code> is always included.)</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isInclusive<span class="token punctuation">)</span>   <span class="token comment">//&gt; true</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token punctuation">.</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isInclusive<span class="token punctuation">)</span>  <span class="token comment">//&gt; false</span>
+</code></pre>
+
+<h3><strong>iterate</strong>(iterator), <strong>iteratorValue</strong>(iterator) <a href="https://wren.io/modules/core/range.html#iterate(iterator),-iteratorvalue(iterator)" name="iterate(iterator),-iteratorvalue(iterator)" class="header-anchor">#</a></h3>
+<p>Iterates over the range. Starts at <code>from</code> and increments by one towards <code>to</code>
+until the endpoint is reached.</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

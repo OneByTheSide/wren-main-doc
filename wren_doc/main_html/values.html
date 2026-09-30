@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0027)./values.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Values – Wren</title>
+<script type="application/javascript" src="./values_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./values_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./values_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./values_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./values_files/style.css">
+<link href="./values_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="./">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="./"><img src="./values_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="./getting-started.html">Getting Started</a></li>
+      <li><a href="./contributing.html">Contributing</a></li>
+      <li><a href="./blog">Blog</a></li>
+      <li><a href="./try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./syntax.html">Syntax</a></li>
+        <li><a href="./values.html">Values</a></li>
+        <li><a href="./lists.html">Lists</a></li>
+        <li><a href="./maps.html">Maps</a></li>
+        <li><a href="./method-calls.html">Method Calls</a></li>
+        <li><a href="./control-flow.html">Control Flow</a></li>
+        <li><a href="./variables.html">Variables</a></li>
+        <li><a href="./classes.html">Classes</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./concurrency.html">Concurrency</a></li>
+        <li><a href="./error-handling.html">Error Handling</a></li>
+        <li><a href="./modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="./cli">Wren CLI</a></li>
+        <li><a href="../embedding/embedding.html">Embedding</a></li>
+        <li><a href="./performance.html">Performance</a></li>
+        <li><a href="./qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="./getting-started.html">Getting Started</a></div><div><a href="./contributing.html">Contributing</a></div><div><a href="./blog">Blog</a></div><div><a href="./try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./syntax.html">Syntax</a></li>
+            <li><a href="./values.html">Values</a></li>
+            <li><a href="./lists.html">Lists</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li><a href="./method-calls.html">Method Calls</a></li>
+            <li><a href="./control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./variables.html">Variables</a></li>
+            <li><a href="./classes.html">Classes</a></li>
+            <li><a href="./functions.html">Functions</a></li>
+            <li><a href="./concurrency.html">Concurrency</a></li>
+            <li><a href="./error-handling.html">Error Handling</a></li>
+            <li><a href="./modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./modules">API/Modules</a></li>
+            <li><a href="./embedding">Embedding</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+            <li><a href="./qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2>Values</h2>
+    <p>Values are the built-in atomic object types that all other objects are composed
+of. They can be created through <em>literals</em>, expressions that evaluate to a
+value. All values are <em>immutable</em>—once created, they do not change. The
+number <code>3</code> is always the number <code>3</code>. The string <code>"frozen"</code> can never have its
+character array modified in place.</p>
+<h2>Booleans <a href="./values.html#booleans" name="booleans" class="header-anchor">#</a></h2>
+<p>A boolean value represents truth or falsehood. There are two boolean literals,
+<code>true</code> and <code>false</code>. Their class is <a href="./modules/core/bool.html">Bool</a>.</p>
+<h2>Numbers <a href="./values.html#numbers" name="numbers" class="header-anchor">#</a></h2>
+<p>Like other scripting languages, Wren has a single numeric type:
+double-precision floating point. Number literals look like you expect coming
+from other languages:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token number">0</span>
+<span class="token number">1234</span>
+<span class="token operator">-</span><span class="token number">5678</span>
+<span class="token number">3.14159</span>
+<span class="token number">1.0</span>
+<span class="token operator">-</span><span class="token number">12.34</span>
+<span class="token number">0.0314159e02</span>
+<span class="token number">0.0314159e+02</span>
+<span class="token number">314.159e-02</span>
+<span class="token number">0xcaffe2</span>
+</code></pre>
+
+<p>Numbers are instances of the <a href="./modules/core/num.html">Num</a> class.</p>
+<h2>Strings <a href="./values.html#strings" name="strings" class="header-anchor">#</a></h2>
+<p>A string is an array of bytes. Typically, they store characters encoded in
+UTF-8, but you can put any byte values in there, even zero or invalid UTF-8
+sequences. (You might have some trouble <em>printing</em> the latter to your terminal,
+though.)</p>
+<p>String literals are surrounded in double quotes:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">"hi there"</span>
+</code></pre>
+
+<p>They can also span multiple lines. When they do, the newline character within
+the string will always be <code>\n</code> (<code>\r\n</code> is normalized to <code>\n</code>). </p>
+<pre class="snippet language-lua"><code class="  language-lua">"hi
+there<span class="token punctuation">,</span>
+again"
+</code></pre>
+
+<h3>Escaping <a href="./values.html#escaping" name="escaping" class="header-anchor">#</a></h3>
+<p>A handful of escape characters are supported:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">"\0"</span> <span class="token comment">// The NUL byte: 0.</span>
+<span class="token string">"\""</span> <span class="token comment">// A double quote character.</span>
+<span class="token string">"\\"</span> <span class="token comment">// A backslash.</span>
+<span class="token string">"\%"</span> <span class="token comment">// A percent sign.</span>
+<span class="token string">"\a"</span> <span class="token comment">// Alarm beep. (Who uses this?)</span>
+<span class="token string">"\b"</span> <span class="token comment">// Backspace.</span>
+<span class="token string">"\e"</span> <span class="token comment">// ESC character.</span>
+<span class="token string">"\f"</span> <span class="token comment">// Formfeed.</span>
+<span class="token string">"\n"</span> <span class="token comment">// Newline.</span>
+<span class="token string">"\r"</span> <span class="token comment">// Carriage return.</span>
+<span class="token string">"\t"</span> <span class="token comment">// Tab.</span>
+<span class="token string">"\v"</span> <span class="token comment">// Vertical tab.</span>
+
+
+<span class="token string">"\x48"</span>        <span class="token comment">// Unencoded byte     (2 hex digits)</span>
+<span class="token string">"\u0041"</span>      <span class="token comment">// Unicode code point (4 hex digits)</span>
+<span class="token string">"\U0001F64A"</span>  <span class="token comment">// Unicode code point (8 hex digits)</span>
+</code></pre>
+
+<p>A <code>\x</code> followed by two hex digits specifies a single unencoded byte:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"\x48\x69\x2e"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; Hi.</span>
+</code></pre>
+
+<p>A <code>\u</code> followed by four hex digits can be used to specify a Unicode code point:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"\u0041\u0b83\u00DE"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; AஃÞ</span>
+</code></pre>
+
+<p>A capital <code>\U</code> followed by <em>eight</em> hex digits allows Unicode code points outside
+of the basic multilingual plane, like all-important emoji:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"\U0001F64A\U0001F680"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; 🙊🚀</span>
+</code></pre>
+
+<p>Strings are instances of class <a href="./modules/core/string.html">String</a>.</p>
+<h3>Interpolation <a href="./values.html#interpolation" name="interpolation" class="header-anchor">#</a></h3>
+<p>String literals also allow <em>interpolation</em>. If you have a percent sign (<code>%</code>)
+followed by a parenthesized expression, the expression is evaluated. The
+resulting object’s <code>toString</code> method is called and the result is inserted in the
+string:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Math %(3 + 4 * 5) is fun!"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; Math 23 is fun!</span>
+</code></pre>
+
+<p>Arbitrarily complex expressions are allowed inside the parentheses:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"wow %((1..3).map {|n| n * n}.join())"</span><span class="token punctuation">)</span> <span class="token comment">//&gt; wow 149</span>
+</code></pre>
+
+<p>An interpolated expression can even contain a string literal which in turn has
+its own nested interpolations, but doing that gets unreadable pretty quickly.</p>
+<h3>Raw strings <a href="./values.html#raw-strings" name="raw-strings" class="header-anchor">#</a></h3>
+<p>A string literal can also be created using triple quotes <code>"""</code> which is
+parsed as a raw string. A raw string is no different
+from any other string, it’s just parsed in a different way.</p>
+<p><strong>Raw strings do not process escapes and do not apply any interpolation</strong>.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">""</span><span class="token string">"hi there"</span><span class="token string">""</span>
+</code></pre>
+
+<p>When a raw string spans multiple lines and a triple quote is on it’s own line,
+any whitespace on that line will be ignored. This means the opening and closing
+lines are not counted as part of the string when the triple quotes are separate lines,
+as long as they only contain whitespace (spaces + tabs).</p>
+<pre class="snippet language-lua"><code class="  language-lua">  <span class="token string">""</span>"
+    Hello world
+  <span class="token string">""</span>"
+</code></pre>
+
+<p>The resulting value in the string above has no newlines or trailing whitespace. 
+Note the spaces in front of the Hello are preserved. </p>
+<pre class="snippet language-lua"><code class="  language-lua">    Hello world
+</code></pre>
+
+<p>A raw string will be parsed exactly as is in the file, unmodified.
+This means it can contain quotes, invalid syntax, other data formats 
+and so on without being modified by Wren.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">""</span>"
+  <span class="token punctuation">{</span>
+    <span class="token string">"hello"</span><span class="token punctuation">:</span> <span class="token string">"wren"</span><span class="token punctuation">,</span>
+    <span class="token string">"from"</span> <span class="token punctuation">:</span> <span class="token string">"json"</span>
+  <span class="token punctuation">}</span>
+<span class="token string">""</span>"
+</code></pre>
+
+<p>One more example, embedding wren code inside a string safely.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token string">""</span>"
+A markdown string with embedded wren code example<span class="token punctuation">.</span>
+
+    <span class="token keyword">class</span> <span class="token function">Example</span> <span class="token punctuation">{</span>
+      <span class="token keyword">construct</span> <span class="token function">code</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token operator">//</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token string">""</span>"
+</code></pre>
+
+<h2>Ranges <a href="./values.html#ranges" name="ranges" class="header-anchor">#</a></h2>
+<p>A range is a little object that represents a consecutive range of numbers. They
+don’t have their own dedicated literal syntax. Instead, the number class
+implements the <code>..</code> and <code>...</code> <a href="./method-calls.html#operators">operators</a> to create them:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token number">3.</span><span class="token number">.8</span>
+</code></pre>
+
+<p>This creates a range from three to eight, including eight itself. If you want a
+half-inclusive range, use <code>...</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token number">4.</span><span class="token punctuation">.</span><span class="token number">.6</span>
+</code></pre>
+
+<p>This creates a range from four to six <em>not</em> including six itself. Ranges are
+commonly used for <a href="./control-flow.html#for-statements">iterating</a> over a
+sequences of numbers, but are useful in other places too. You can pass them to
+a <a href="./lists.html">list</a>‘s subscript operator to return a subset of the list, for
+example, or on a String, the substring in that range:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">,</span> <span class="token string">"e"</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> slice <span class="token operator">=</span> list<span class="token punctuation">[</span><span class="token number">1.</span><span class="token number">.3</span><span class="token punctuation">]</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>slice<span class="token punctuation">)</span> <span class="token comment">//&gt; [b, c, d]</span>
+
+<span class="token keyword">var</span> string <span class="token operator">=</span> <span class="token string">"hello wren"</span>
+<span class="token keyword">var</span> wren <span class="token operator">=</span> string<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4.</span><span class="token punctuation">.</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>wren<span class="token punctuation">)</span> <span class="token comment">//&gt; wren</span>
+</code></pre>
+
+<p>Their class is <a href="./modules/core/range.html">Range</a>.</p>
+<h2>Null <a href="./values.html#null" name="null" class="header-anchor">#</a></h2>
+<p>Wren has a special value <code>null</code>, which is the only instance of the class
+<a href="./modules/core/null.html">Null</a>. (Note the difference in case.) It functions a bit like <code>void</code> in some
+languages: it indicates the absence of a value. If you call a method that
+doesn’t return anything and get its returned value, you get <code>null</code> back.</p>
+<p><br></p><hr>
+<a class="right" href="./lists.html">Lists →</a>
+<a href="./syntax.html">← Syntax</a><p></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

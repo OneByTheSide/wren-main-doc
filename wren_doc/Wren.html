@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!-- saved from url=(0016)https://wren.io/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title> – Wren</title>
+<script type="application/javascript" src="./Wren_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./Wren_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./Wren_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./Wren_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./Wren_files/style.css">
+<link href="./Wren_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./Wren_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="./html/getting-started.html">Getting Started</a></li>
+      <li><a href="./html/contributing.html">Contributing</a></li>
+      <li><a href="./html/blog">Blog</a></li>
+      <li><a href="./html/try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./main_html/syntax.html">Syntax</a></li>
+        <li><a href="./main_html/values.html">Values</a></li>
+        <li><a href="./main_html/lists.html">Lists</a></li>
+        <li><a href="./main_html/maps.html">Maps</a></li>
+        <li><a href="./main_html/method-calls.html">Method Calls</a></li>
+        <li><a href="./main_html/control-flow.html">Control Flow</a></li>
+        <li><a href="./main_html/variables.html">Variables</a></li>
+        <li><a href="./main_html/classes.html">Classes</a></li>
+        <li><a href="./main_html/functions.html">Functions</a></li>
+        <li><a href="./main_html/concurrency.html">Concurrency</a></li>
+        <li><a href="./main_html/error-handling.html">Error Handling</a></li>
+        <li><a href="./main_html/modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./main_html/modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="https://wren.io/cli">Wren CLI</a></li>
+        <li><a href="./embedding/embedding.html">Embedding</a></li>
+        <li><a href="https://wren.io/performance.html">Performance</a></li>
+        <li><a href="https://wren.io/qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="https://wren.io/getting-started.html">Getting Started</a></div><div><a href="https://wren.io/contributing.html">Contributing</a></div><div><a href="https://wren.io/blog">Blog</a></div><div><a href="https://wren.io/try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./html/syntax.html">Syntax</a></li>
+            <li><a href="./html/values.html">Values</a></li>
+            <li><a href="./html/lists.html">Lists</a></li>
+            <li><a href="./html/maps.html">Maps</a></li>
+            <li><a href="./html/method-calls.html">Method Calls</a></li>
+            <li><a href="./html/control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./html/variables.html">Variables</a></li>
+            <li><a href="./html/classes.html">Classes</a></li>
+            <li><a href="./html/functions.html">Functions</a></li>
+            <li><a href="./html/concurrency.html">Concurrency</a></li>
+            <li><a href="./html/error-handling.html">Error Handling</a></li>
+            <li><a href="./html/modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules">API/Modules</a></li>
+            <li><a href="./embedding/embedding.html">Embedding</a></li>
+            <li><a href="https://wren.io/performance.html">Performance</a></li>
+            <li><a href="https://wren.io/qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2></h2>
+    <h2>Wren is a small, fast, class-based concurrent scripting language <a href="https://wren.io/#wren-is-a-small,-fast,-class-based-concurrent-scripting-language" name="wren-is-a-small,-fast,-class-based-concurrent-scripting-language" class="header-anchor">#</a></h2>
+<hr>
+<p>Think Smalltalk in a Lua-sized package with a dash of Erlang and wrapped up in
+a familiar, modern <a href="https://wren.io/syntax.html">syntax</a>.</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token function">Wren</span> <span class="token punctuation">{</span>
+  <span class="token function">flyTo</span><span class="token punctuation">(</span>city<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Flying to %(city)"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> adjectives <span class="token operator">=</span> Fiber<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token string">"small"</span><span class="token punctuation">,</span> <span class="token string">"clean"</span><span class="token punctuation">,</span> <span class="token string">"fast"</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">each</span> <span class="token punctuation">{</span><span class="token operator">|</span>word<span class="token operator">|</span> Fiber<span class="token punctuation">.</span><span class="token function">yield</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">while</span> <span class="token punctuation">(</span>!adjectives<span class="token punctuation">.</span>isDone<span class="token punctuation">)</span> System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>adjectives<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+
+<ul>
+<li>
+<p><strong>Wren is small.</strong> The VM implementation is under <a href="https://github.com/wren-lang/wren/tree/main/src">4,000 semicolons</a>.
+    You can skim the whole thing in an afternoon. It’s <em>small</em>, but not
+    <em>dense</em>. It is readable and <a href="https://github.com/wren-lang/wren/blob/46c1ba92492e9257aba6418403161072d640cb29/src/wren_value.h#L378-L433">lovingly-commented</a>.</p>
+</li>
+<li>
+<p><strong>Wren is fast.</strong> A fast single-pass compiler to tight bytecode, and a
+    compact object representation help Wren <a href="https://wren.io/performance.html">compete with other dynamic
+    languages</a>.</p>
+</li>
+<li>
+<p><strong>Wren is class-based.</strong> There are lots of scripting languages out there,
+    but many have unusual or non-existent object models. Wren places
+    <a href="https://wren.io/classes.html">classes</a> front and center.</p>
+</li>
+<li>
+<p><strong>Wren is concurrent.</strong> Lightweight <a href="https://wren.io/concurrency.html">fibers</a> are core to the execution
+    model and let you organize your program into a flock of communicating
+    coroutines.</p>
+</li>
+<li>
+<p><strong>Wren is a scripting language.</strong> Wren is intended for embedding in
+    applications. It has no dependencies, a small standard library,
+    and <a href="https://wren.io/embedding">an easy-to-use C API</a>. It compiles cleanly as C99, C++98
+    or anything later.</p>
+</li>
+</ul>
+<hr>
+<p>You can try it <a href="https://wren.io/try">in your browser</a>! <br>
+If you like the sound of this, <a href="https://wren.io/getting-started.html">let’s get started</a>.  <br>
+Excited? You’re also welcome to <a href="https://wren.io/contributing.html">get involved</a>!</p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

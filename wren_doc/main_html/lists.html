@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)./lists.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Lists – Wren</title>
+<script type="application/javascript" src="./lists_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./lists_files/codejar.js.下载"></script>
+<script type="application/javascript" src="./lists_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./lists_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./lists_files/style.css">
+<link href="./lists_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="./">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="./"><img src="./lists_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="./getting-started.html">Getting Started</a></li>
+      <li><a href="./contributing.html">Contributing</a></li>
+      <li><a href="./blog">Blog</a></li>
+      <li><a href="./try">Try it!</a></li>
+    </ul>
+    <section>
+      <h2>guides</h2>
+      <ul>
+        <li><a href="./syntax.html">Syntax</a></li>
+        <li><a href="./values.html">Values</a></li>
+        <li><a href="./lists.html">Lists</a></li>
+        <li><a href="./maps.html">Maps</a></li>
+        <li><a href="./method-calls.html">Method Calls</a></li>
+        <li><a href="./control-flow.html">Control Flow</a></li>
+        <li><a href="./variables.html">Variables</a></li>
+        <li><a href="./classes.html">Classes</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./concurrency.html">Concurrency</a></li>
+        <li><a href="./error-handling.html">Error Handling</a></li>
+        <li><a href="./modularity.html">Modularity</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>API docs</h2>
+      <ul>
+        <li><a href="./modules/modules.html">Modules</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>reference</h2>
+      <ul>
+        <li><a href="./cli">Wren CLI</a></li>
+        <li><a href="../embedding/embedding.html">Embedding</a></li>
+        <li><a href="./performance.html">Performance</a></li>
+        <li><a href="./qa.html">Q &amp; A</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <div><a href="./getting-started.html">Getting Started</a></div><div><a href="./contributing.html">Contributing</a></div><div><a href="./blog">Blog</a></div><div><a href="./try">Try it!</a></div><table>
+      <tbody><tr>
+        
+        
+        
+        
+      </tr>
+      <tr>
+        <td colspan="2"><h2>guides</h2></td>
+        <td><h2>reference</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="./syntax.html">Syntax</a></li>
+            <li><a href="./values.html">Values</a></li>
+            <li><a href="./lists.html">Lists</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li><a href="./method-calls.html">Method Calls</a></li>
+            <li><a href="./control-flow.html">Control Flow</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./variables.html">Variables</a></li>
+            <li><a href="./classes.html">Classes</a></li>
+            <li><a href="./functions.html">Functions</a></li>
+            <li><a href="./concurrency.html">Concurrency</a></li>
+            <li><a href="./error-handling.html">Error Handling</a></li>
+            <li><a href="./modularity.html">Modularity</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="./modules">API/Modules</a></li>
+            <li><a href="./embedding">Embedding</a></li>
+            <li><a href="./performance.html">Performance</a></li>
+            <li><a href="./qa.html">Q &amp; A</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h2>Lists</h2>
+    <p>A list is a compound object that holds a collection of elements identified by
+integer index. You can create a list by placing a sequence of comma-separated
+expressions inside square brackets:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"banana"</span><span class="token punctuation">,</span> <span class="token keyword">true</span><span class="token punctuation">]</span>
+</code></pre>
+
+<p>Here, we’ve created a list of three elements. Notice that the elements don’t
+have to be the same type.</p>
+<h2>Accessing elements <a href="./lists.html#accessing-elements" name="accessing-elements" class="header-anchor">#</a></h2>
+<p>You can access an element from a list by calling the <a href="./method-calls.html#subscripts">subscript
+operator</a> on it with the index of the
+element you want. Like most languages, indexes start at zero:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> trees <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"cedar"</span><span class="token punctuation">,</span> <span class="token string">"birch"</span><span class="token punctuation">,</span> <span class="token string">"oak"</span><span class="token punctuation">,</span> <span class="token string">"willow"</span><span class="token punctuation">]</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; cedar</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; birch</span>
+</code></pre>
+
+<p>Negative indices counts backwards from the end:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; willow</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; oak</span>
+</code></pre>
+
+<p>It’s a runtime error to pass an index outside of the bounds of the list. If you
+don’t know what those bounds are, you can find out using count:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">.</span>count<span class="token punctuation">)</span> <span class="token comment">//&gt; 4</span>
+</code></pre>
+
+<h2>Slices and ranges <a href="./lists.html#slices-and-ranges" name="slices-and-ranges" class="header-anchor">#</a></h2>
+<p>Sometimes you want to copy a chunk of elements from a list. You can do that by
+passing a <a href="./values.html#ranges">range</a> to the subscript operator, like so:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token number">1.</span><span class="token number">.2</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; [birch, oak]</span>
+</code></pre>
+
+<p>This returns a new list containing the elements of the original list whose
+indices are within the given range. Both inclusive and exclusive ranges work
+and do what you expect.</p>
+<p>Negative bounds also work like they do when passing a single number, so to copy
+a list, you can just do:</p>
+<pre class="snippet language-lua"><code class="  language-lua">trees<span class="token punctuation">[</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+</code></pre>
+
+<h2>Adding elements <a href="./lists.html#adding-elements" name="adding-elements" class="header-anchor">#</a></h2>
+<p>Lists are <em>mutable</em>, meaning their contents can be changed. You can swap out an
+existing element in the list using the subscript setter:</p>
+<pre class="snippet language-lua"><code class="  language-lua">trees<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"spruce"</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//&gt; spruce</span>
+</code></pre>
+
+<p>It’s an error to set an element that’s out of bounds. To grow a list, you can
+use <code>add</code> to append a single item to the end:</p>
+<pre class="snippet language-lua"><code class="  language-lua">trees<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"maple"</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">.</span>count<span class="token punctuation">)</span> <span class="token comment">//&gt; 5</span>
+</code></pre>
+
+<p>You can insert a new element at a specific position using <code>insert</code>:</p>
+<pre class="snippet language-lua"><code class="  language-lua">trees<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"hickory"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>The first argument is the index to insert at, and the second is the value to
+insert. All elements following the inserted one will be pushed down to
+make room for it.</p>
+<p>It’s valid to “insert” after the last element in the list, but only <em>right</em>
+after it. Like other methods, you can use a negative index to count from the
+back. Doing so counts back from the size of the list <em>after</em> it’s grown by one:</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> letters <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">]</span>
+letters<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">)</span>   <span class="token comment">// OK: inserts at end.</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">)</span>    <span class="token comment">//&gt; [a, b, c, d]</span>
+letters<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">"e"</span><span class="token punctuation">)</span>  <span class="token comment">// Counts back from size after insert.</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">)</span>    <span class="token comment">//&gt; [a, b, c, e, d]</span>
+</code></pre>
+
+<h2>Adding lists together <a href="./lists.html#adding-lists-together" name="adding-lists-together" class="header-anchor">#</a></h2>
+<p>Lists have the ability to be added together via the <code>+</code> operator. This is often known as concatenation.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> letters <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> other <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"d"</span><span class="token punctuation">,</span> <span class="token string">"e"</span><span class="token punctuation">,</span> <span class="token string">"f"</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> combined <span class="token operator">=</span> letters <span class="token operator">+</span> other
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>combined<span class="token punctuation">)</span>  <span class="token comment">//&gt; [a, b, c, d, e, f]</span>
+</code></pre>
+
+<h2>Removing elements <a href="./lists.html#removing-elements" name="removing-elements" class="header-anchor">#</a></h2>
+<p>The opposite of <code>insert</code> is <code>removeAt</code>. It removes a single element from a
+given position in the list. </p>
+<p>To remove a specific <em>value</em> instead, use <code>remove</code>. The first value that 
+matches using regular equality will be removed.</p>
+<p>In both cases, all following items are shifted up to fill in the gap.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">var</span> letters <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"b"</span><span class="token punctuation">,</span> <span class="token string">"c"</span><span class="token punctuation">,</span> <span class="token string">"d"</span><span class="token punctuation">]</span>
+letters<span class="token punctuation">.</span><span class="token function">removeAt</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">)</span> <span class="token comment">//&gt; [a, c, d]</span>
+letters<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">)</span> <span class="token comment">//&gt; [c, d]</span>
+</code></pre>
+
+<p>Both the <code>remove</code> and <code>removeAt</code> method return the removed item:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">.</span><span class="token function">removeAt</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; c</span>
+</code></pre>
+
+<p>If <code>remove</code> couldn’t find the value in the list, it returns null:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>letters<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token string">"not found"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//&gt; null</span>
+</code></pre>
+
+<p>If you want to remove everything from the list, you can clear it:</p>
+<pre class="snippet language-lua"><code class="  language-lua">trees<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>trees<span class="token punctuation">)</span> <span class="token comment">//&gt; []</span>
+</code></pre>
+
+<p><br></p><hr>
+<a class="right" href="./maps.html">Maps →</a>
+<a href="./values.html">← Values</a><p></p>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)https://wren.io/modules/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Modules – Wren</title>
+<script type="application/javascript" src="./modules_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./modules_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./modules_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./modules_files/style.css">
+<link href="./modules_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./modules_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../../Wren.html">Back to Wren</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./core/bool.html">Bool</a></li>
+        <li><a href="./core/class.html">Class</a></li>
+        <li><a href="./core/fiber.html">Fiber</a></li>
+        <li><a href="./core/fn.html">Fn</a></li>
+        <li><a href="./core/list.html">List</a></li>
+        <li><a href="./core/map.html">Map</a></li>
+        <li><a href="./core/null.html">Null</a></li>
+        <li><a href="./core/num.html">Num</a></li>
+        <li><a href="./core/object.html">Object</a></li>
+        <li><a href="./core/range.html">Range</a></li>
+        <li><a href="./core/sequence.html">Sequence</a></li>
+        <li><a href="./core/string.html">String</a></li>
+        <li><a href="./core/system.html">System</a></li>
+      </ul>
+    </section>
+    <section>
+      <h2>optional</h2>
+      <ul>
+        <li><a href="https://wren.io/modules/meta">meta</a></li>
+        <li><a href="https://wren.io/modules/random">random</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><h2>core classes</h2></td>
+        <td><h2>optional</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/meta">meta</a></li>
+            <li><a href="https://wren.io/modules/random">random</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Modules</h1>
+    <p>Wren comes with two kinds of modules, the core module (built-in),
+and a few optional modules that the host embedding Wren can enable.</p>
+<h2>Core module <a href="https://wren.io/modules/#core-module" name="core-module" class="header-anchor">#</a></h2>
+<p>The core module is built directly into the VM and is implicitly
+imported by every other module. You don’t need to <code>import</code> anything to use it.
+It contains objects and types for the language itself like <a href="https://wren.io/modules/core/num.html">numbers</a> and <a href="https://wren.io/modules/core/string.html">strings</a>.</p>
+<p>Because Wren is designed for [embedding in applications][embedding], its core
+module is minimal and is focused on working with objects within Wren. For
+stuff like file IO, graphics, etc., it is up to the host application to provide
+interfaces for this.</p>
+<h2>Optional modules <a href="https://wren.io/modules/#optional-modules" name="optional-modules" class="header-anchor">#</a></h2>
+<p>Optional modules are available in the Wren project, but whether they are included is up to the host.
+They are written in Wren and C, with no external dependencies, so including them in
+your application is as easy as a simple compile flag.</p>
+<p>Since they aren’t <em>needed</em> by the VM itself to function, you can
+disable some or all of them, so check if your host has them available.</p>
+<p>So far there are a few optional modules:</p>
+<ul>
+<li><a href="https://wren.io/modules/meta">meta docs</a></li>
+<li><a href="https://wren.io/modules/random">random docs</a></li>
+</ul>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>

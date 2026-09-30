@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://wren.io/modules/core/class.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Class Class – Wren</title>
+<script type="application/javascript" src="./class_files/prism.js.下载" data-manual=""></script>
+<script type="application/javascript" src="./class_files/wren.js.下载"></script>
+<link rel="stylesheet" type="text/css" href="./class_files/prism.css">
+<link rel="stylesheet" type="text/css" href="./class_files/style.css">
+<link href="./class_files/css" rel="stylesheet" type="text/css">
+<!-- Tell mobile browsers we're optimized for them and they don't need to crop
+     the viewport. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body id="top" class="module">
+<header>
+  <div class="page">
+    <div class="main-column">
+      <h1><a href="https://wren.io/">wren</a></h1>
+      <h2>a classy little scripting language</h2>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <nav class="big">
+    <a href="https://wren.io/"><img src="./class_files/wren.svg" class="logo"></a>
+    <ul>
+      <li><a href="../modules.html">Back to Modules</a></li>
+    </ul>
+    <section>
+      <h2>core classes</h2>
+      <ul>
+        <li><a href="./bool.html">Bool</a></li>
+        <li><a href="./class.html">Class</a></li>
+        <li><a href="./fiber.html">Fiber</a></li>
+        <li><a href="./fn.html">Fn</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./map.html">Map</a></li>
+        <li><a href="./null.html">Null</a></li>
+        <li><a href="./num.html">Num</a></li>
+        <li><a href="./object.html">Object</a></li>
+        <li><a href="./range.html">Range</a></li>
+        <li><a href="./sequence.html">Sequence</a></li>
+        <li><a href="./string.html">String</a></li>
+        <li><a href="./system.html">System</a></li>
+      </ul>
+    </section>
+  </nav>
+  <nav class="small">
+    <table>
+      <tbody><tr>
+        <td><a href="../modules.html">Modules</a></td>
+        <td><a href="https://wren.io/modules/core/">core</a></td>
+      </tr>
+      <tr>
+        <td colspan="2"><h2>core classes</h2></td>
+      </tr>
+      <tr>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/bool.html">Bool</a></li>
+            <li><a href="https://wren.io/modules/core/class.html">Class</a></li>
+            <li><a href="https://wren.io/modules/core/fiber.html">Fiber</a></li>
+            <li><a href="https://wren.io/modules/core/fn.html">Fn</a></li>
+            <li><a href="https://wren.io/modules/core/list.html">List</a></li>
+            <li><a href="https://wren.io/modules/core/map.html">Map</a></li>
+            <li><a href="https://wren.io/modules/core/null.html">Null</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><a href="https://wren.io/modules/core/num.html">Num</a></li>
+            <li><a href="https://wren.io/modules/core/object.html">Object</a></li>
+            <li><a href="https://wren.io/modules/core/range.html">Range</a></li>
+            <li><a href="https://wren.io/modules/core/sequence.html">Sequence</a></li>
+            <li><a href="https://wren.io/modules/core/string.html">String</a></li>
+            <li><a href="https://wren.io/modules/core/system.html">System</a></li>
+          </ul>
+        </td>
+      </tr>
+    </tbody></table>
+  </nav>
+  <main>
+    <h1>Class Class</h1>
+    <p><strong>TODO</strong></p>
+<h2>Methods <a href="https://wren.io/modules/core/class.html#methods" name="methods" class="header-anchor">#</a></h2>
+<h3><strong>name</strong> <a href="https://wren.io/modules/core/class.html#name" name="name" class="header-anchor">#</a></h3>
+<p>The name of the class.</p>
+<h3><strong>supertype</strong> <a href="https://wren.io/modules/core/class.html#supertype" name="supertype" class="header-anchor">#</a></h3>
+<p>The superclass of this class.</p>
+<pre class="snippet language-lua"><code class="  language-lua"><span class="token keyword">class</span> <span class="token function">Crustacean</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">class</span> Crab <span class="token keyword">is</span> <span class="token function">Crustacean</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>Crab<span class="token punctuation">.</span>supertype<span class="token punctuation">)</span> <span class="token comment">//&gt; Crustacean</span>
+</code></pre>
+
+<p>A class with no explicit superclass implicitly inherits Object:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>Crustacean<span class="token punctuation">.</span>supertype<span class="token punctuation">)</span> <span class="token comment">//&gt; Object</span>
+</code></pre>
+
+<p>Object forms the root of the class hierarchy and has no supertype:</p>
+<pre class="snippet language-lua"><code class="  language-lua">System<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span>supertype<span class="token punctuation">)</span> <span class="token comment">//&gt; null</span>
+</code></pre>
+  </main>
+</div>
+<footer>
+  <div class="page">
+    <div class="main-column">
+    <p>Wren lives
+      <a href="https://github.com/wren-lang/wren">on GitHub</a>
+      — Made with ❤ by
+      <a href="http://journal.stuffwithstuff.com/">Bob Nystrom</a> and
+      <a href="https://github.com/wren-lang/wren/blob/main/AUTHORS">friends</a>.
+    </p>
+    <div class="main-column">
+  </div>
+</div></div></footer>
+
+
+</body></html>
